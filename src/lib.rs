@@ -164,7 +164,3 @@ where
 pub fn constant<R>(val: R) -> impl FnOnce() -> R {
     move || val
 }
-
-pub fn constant_clone<R: Clone>(val: R) -> impl Fn() -> R {
-    move || val.clone()
-}
