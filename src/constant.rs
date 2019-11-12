@@ -2,7 +2,7 @@
 ///
 /// # Example
 /// ```
-/// use fntools::constant;
+/// use fntools::constant::constant;
 ///
 /// let fun = constant(String::from("Hi"));
 /// assert_eq!(fun(), "Hi");

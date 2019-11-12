@@ -1,7 +1,7 @@
 /// Represents a type which can have functions applied to it (implemented
 /// by default for all types).
 pub trait ValueExt {
-    /// Apply a function which takes the parameter by value.
+    /// Apply a function to `self`.
     ///
     /// # Examples
     /// ```
@@ -13,13 +13,18 @@ pub trait ValueExt {
     ///
     /// assert_eq!(val, 25)
     /// ```
-    fn apply<R, F: FnOnce(Self) -> R>(self, f: F) -> R where Self: Sized {
+    fn apply<F, R>(self, f: F) -> R
+    where
+        Self: Sized,
+        F: FnOnce(Self) -> R
+    {
         f(self)
     }
 
     /// Execute function with reference to `self` and return `self`.
     ///
-    /// Similar to [`dbg!`] macro - `dbg!(expression)` and `(expression).also(|it| println!("{:?}", it))` do the same[^1] thing.
+    /// Similar to [`dbg!`] macro - `dbg!(expression)` and
+    /// `expression.also(|it| println!("{:?}", it))` do the same[^1] thing.
     ///
     /// # Examples
     /// ```
@@ -34,13 +39,18 @@ pub trait ValueExt {
     /// assert_eq!(val, 4);
     /// ```
     /// [^1]: actually no, cause `dbg!` also prints file/line
-    fn also<F: FnOnce(&Self) -> ()>(self, f: F) -> Self where Self: Sized {
+    fn also<F>(self, f: F) -> Self
+    where
+        Self: Sized,
+        F: FnOnce(&Self) -> (),
+    {
         f(&self);
         self
     }
 }
 
-// All functions of `ValueExt` actually require `Self: Sized` so `T: ?Sized` isn't currently needed, but it's placeholder for future.
+// All functions of `ValueExt` actually require `Self: Sized` so `T: ?Sized`
+// isn't currently needed, but it's placeholder for future.
 impl<T: ?Sized> ValueExt for T {
     // use default definitions...
 }

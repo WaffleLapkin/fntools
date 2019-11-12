@@ -9,7 +9,7 @@
 /// assert_eq!((true, 42, ()).flip_tuple(), ((), 42, true));
 /// ```
 /// ## Limitations
-/// By now there are implementations only for tupples of arity 3 or less
+/// By now there are implementations only for tuples of arity 3 or less
 pub trait FlipTuple {
     type Res;
 
@@ -22,8 +22,8 @@ impl FlipTuple for () {
     fn flip_tuple(self) {}
 }
 
-impl<T> FlipTuple for (T,) {
-    type Res = (T,);
+impl<A> FlipTuple for (A,) {
+    type Res = (A,);
 
     fn flip_tuple(self) -> Self::Res {
         self

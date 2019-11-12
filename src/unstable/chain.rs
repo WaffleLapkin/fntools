@@ -59,7 +59,7 @@ use std::fmt::{Debug, Formatter, Error};
 /// [`unboxed_closures`]: https://doc.rust-lang.org/unstable-book/language-features/unboxed-closures.html
 /// [tracking issue]: https://github.com/rust-lang/rust/issues/29625
 /// [second example]: #second_example
-/// [`FnExtChain::chain`]: crate::unstable::chain::FnExtchain::chain
+/// [`FnExtChain::chain`]: crate::unstable::chain::FnExtChain::chain
 /// [`fntools::chain`]: crate::chain
 pub fn chain<A, B, C, D, F, G>(f: F, g: G) -> Chain<F, G, C>
 where

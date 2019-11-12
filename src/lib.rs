@@ -8,11 +8,13 @@ pub mod value;
 /// Functions that return functions that return constants
 pub mod constant;
 
+/// Helper for `unstable` things
 pub mod auto_tuple;
+/// Helper for `unstable` things
 pub mod flip_tuple;
 
 pub mod prelude {
-    pub use super::{value::ValueExt, flip_args, chain, compose};
+    pub use crate::{value::ValueExt, chain};
 }
 
 mod macro_def;
@@ -23,11 +25,11 @@ mod macro_def;
 ///
 /// # Examples
 /// ```
-/// use fntools::chain;
+/// use fntools::compose;
 ///
 /// let add_two = |a: i32| a + 2;
 /// let add_three = |a: i32| a + 3;
-/// let add_five = chain(add_two, add_three);
+/// let add_five = compose(add_two, add_three);
 ///
 /// assert_eq!(add_five(4), 9);
 /// ```
@@ -60,7 +62,7 @@ pub fn compose<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
     move |a: A| f(g(a))
 }
 
-/// Compose two functions.
+/// Chain two functions.
 ///
 /// Takes functions `f` and `g` and returns `g ∘ f = |a: A| g(f(a))`.
 ///
@@ -96,9 +98,9 @@ pub fn compose<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
 /// [`unstable::chain`]: crate::unstable::chain::chain
 /// [`fntools::compose`]: crate::compose
 pub fn chain<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
-    where
-        F: Fn(A) -> B,
-        G: Fn(B) -> C,
+where
+    F: Fn(A) -> B,
+    G: Fn(B) -> C,
 {
     move |a: A| g(f(a))
 }
@@ -115,7 +117,8 @@ pub fn chain<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
 /// assert_eq!(fun(17, "hello, "), "hello, 17")
 /// ```
 pub fn flip_args<A, B, R, F>(f: F) -> impl FnOnce(B, A) -> R
-where F: FnOnce(A, B) -> R
+where
+    F: FnOnce(A, B) -> R
 {
     move |b: B, a: A| f(a, b)
 }
