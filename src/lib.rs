@@ -3,6 +3,8 @@
 /// Features that uses nightly-only unstable API
 #[cfg(not(feature = "stable"))]
 pub mod unstable;
+pub mod auto_tuple;
+pub mod flip_tuple;
 
 pub mod prelude {
     pub use super::{ValueExt, swap_args, chain, compose};
