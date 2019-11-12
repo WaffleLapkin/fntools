@@ -122,3 +122,25 @@ where
 {
     move |b: B, a: A| f(a, b)
 }
+
+/// Cartesian product of functions.
+///
+/// Takes functions `f` and `g` and returns `g × f = |a: A, x: X| (f(a), g(x))`.
+///
+/// ## Example
+/// ```
+/// use fntools::product;
+///
+/// // TODO: better example
+/// let string = "привет";
+/// let (slice, str) = product(<[_]>::len, str::len)(string.as_bytes(), string);
+/// assert_eq!(slice, 12);
+/// assert_eq!(str, 12);
+/// ```
+pub fn product<A, B, X, Y, F, G>(f: F, g: G) -> impl Fn(A, X) -> (B, Y)
+where
+    F: Fn(A) -> B,
+    G: Fn(X) -> Y,
+{
+    move |a: A, x: X| (f(a), g(x))
+}
