@@ -101,6 +101,11 @@ impl<F, G, C> Compose<F, G, C> {
     {
         Compose(f, g, PhantomData)
     }
+
+    pub fn into_inner(self) -> (F, G) {
+        let Compose(f, g, _) = self;
+        (f, g)
+    }
 }
 
 impl<A, B, C, D, F, G> FnOnce<A> for Compose<F, G, C>

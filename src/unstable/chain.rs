@@ -101,6 +101,11 @@ impl<F, G, C> Chain<F, G, C> {
     {
         Chain(f, g, PhantomData)
     }
+
+    pub fn into_inner(self) -> (F, G) {
+        let Chain(f, g, _) = self;
+        (f, g)
+    }
 }
 
 impl<A, B, C, D, F, G> FnOnce<A> for Chain<F, G, C>

@@ -57,9 +57,9 @@ mod macro_def;
 /// [`unstable::compose`]: crate::unstable::compose::compose
 /// [`fntools::chain`]: crate::chain
 pub fn compose<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
-    where
-        G: Fn(A) -> B,
-        F: Fn(B) -> C,
+where
+    G: Fn(A) -> B,
+    F: Fn(B) -> C,
 {
     move |a: A| f(g(a))
 }
