@@ -5,8 +5,6 @@
 pub mod unstable;
 /// Extension for all types
 pub mod value;
-/// Functions that return functions that return constants
-pub mod constant;
 /// Flipping function arguments/output/both
 pub mod flip;
 
