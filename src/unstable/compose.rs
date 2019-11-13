@@ -90,6 +90,7 @@ where
 /// But `C` is not. To Fix this `C` was added to `Chain` struct.
 ///
 /// [`Chain`]: crate::unstable::chain::Chain
+#[must_use = "function combinators are lazy and do nothing unless called"]
 pub struct Compose<F, G, C>(F, G, PhantomData<dyn Fn(C)>);
 
 impl<F, G, C> Compose<F, G, C> {
