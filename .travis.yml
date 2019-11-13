@@ -7,7 +7,7 @@ cache: cargo
 script:
   - cargo build --verbose ${FEATURES}
   - cargo test --verbose ${FEATURES}
-  - cargo fmt --all ${FEATURES} -- --check
+  - cargo fmt --all -- --check
   - cargo clippy --all-targets ${FEATURES} -- -D warnings
 jobs:
   include:

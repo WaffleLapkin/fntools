@@ -1,3 +1,5 @@
+#![allow(clippy::unit_cmp)]
+
 /// Flips tuple, so first element becomes last, last becomes first, 2-nd becomes
 /// 2-nd from the end and so on.
 ///
