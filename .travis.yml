@@ -1,0 +1,23 @@
+language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+before_install:
+  - rustup component add clippy rustfmt
+env:
+  - RUST_BACKTRACE=1
+cache: cargo
+script:
+  - cargo build --verbose ${FEATURES}
+  - cargo test --verbose ${FEATURES}
+  - cargo fmt --all ${FEATURES} -- --check
+  - cargo clippy --all-targets ${FEATURES} -- -D warnings
+jobs:
+  include:
+    - rust: beta
+      env: FEATURES=--features\ stable
+    - rust: stable
+      env: FEATURES=--features\ stable
+    - rust: nightly
+      env: FEATURES=
