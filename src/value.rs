@@ -16,7 +16,7 @@ pub trait ValueExt {
     fn apply<F, R>(self, f: F) -> R
     where
         Self: Sized,
-        F: FnOnce(Self) -> R
+        F: FnOnce(Self) -> R,
     {
         f(self)
     }

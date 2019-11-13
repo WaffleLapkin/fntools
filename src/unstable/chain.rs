@@ -1,6 +1,9 @@
+use std::{
+    fmt::{Debug, Error, Formatter},
+    marker::PhantomData,
+};
+
 use crate::auto_tuple::AutoTuple;
-use std::marker::PhantomData;
-use std::fmt::{Debug, Formatter, Error};
 
 /// Chain two functions.
 ///
@@ -189,7 +192,7 @@ pub trait FnExtChain<A, B> {
 
 impl<A, B, F> FnExtChain<A, B> for F
 where
-    F: FnOnce<A, Output = B>
+    F: FnOnce<A, Output = B>,
 {
     fn chain<C, D, G>(self, g: G) -> Chain<Self, G, C>
     where
@@ -228,4 +231,5 @@ impl<F, G, C> Copy for Chain<F, G, C>
 where
     F: Copy,
     G: Copy,
-{}
+{
+}

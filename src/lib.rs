@@ -1,12 +1,12 @@
 #![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
 
+/// Flipping function arguments/output/both
+pub mod flip;
 /// Features that uses nightly-only unstable API
 #[cfg(not(feature = "stable"))]
 pub mod unstable;
 /// Extension for all types
 pub mod value;
-/// Flipping function arguments/output/both
-pub mod flip;
 
 /// Helper for `unstable` things
 pub mod auto_tuple;
@@ -14,7 +14,7 @@ pub mod auto_tuple;
 pub mod flip_tuple;
 
 pub mod prelude {
-    pub use crate::{value::ValueExt, chain};
+    pub use crate::{chain, value::ValueExt};
 }
 
 mod macro_def;

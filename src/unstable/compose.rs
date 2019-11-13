@@ -1,6 +1,9 @@
+use std::{
+    fmt::{Debug, Error, Formatter},
+    marker::PhantomData,
+};
+
 use crate::auto_tuple::AutoTuple;
-use std::marker::PhantomData;
-use std::fmt::{Debug, Formatter, Error};
 
 /// Compose two functions.
 ///
@@ -228,4 +231,5 @@ impl<F, G, C> Copy for Compose<F, G, C>
 where
     F: Copy,
     G: Copy,
-{}
+{
+}

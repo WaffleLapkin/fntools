@@ -18,8 +18,8 @@
 /// assert_eq!(res, (4 + 1) * 7 + 2);
 /// ```
 pub mod prelude {
-    pub use super::chain::{Chain, chain, FnExtChain};
-    pub use super::compose::{Compose, compose, FnExtCompose};
+    pub use super::chain::{chain, Chain, FnExtChain};
+    pub use super::compose::{compose, Compose, FnExtCompose};
 }
 
 pub use chain::{chain, Chain};
