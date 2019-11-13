@@ -54,10 +54,32 @@ mod macro_def;
 ///
 /// [`unstable::compose`]: crate::unstable::compose::compose
 /// [`fntools::chain`]: crate::chain
-pub fn compose<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
+pub fn compose<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C
 where
     G: Fn(A) -> B,
     F: Fn(B) -> C,
+{
+    move |a: A| f(g(a))
+}
+
+/// Compose two functions which can be called only once.
+///
+/// See [compose](self::compose) for documentation.
+pub fn compose_once<A, B, C, F, G>(f: F, g: G) -> impl FnOnce(A) -> C
+where
+    G: FnOnce(A) -> B,
+    F: FnOnce(B) -> C,
+{
+    move |a: A| f(g(a))
+}
+
+/// Compose two functions which can be called only by unique reference.
+///
+/// See [compose](self::compose) for documentation.
+pub fn compose_mut<A, B, C, F, G>(mut f: F, mut g: G) -> impl FnMut(A) -> C
+where
+    G: FnMut(A) -> B,
+    F: FnMut(B) -> C,
 {
     move |a: A| f(g(a))
 }
@@ -97,10 +119,32 @@ where
 ///
 /// [`unstable::chain`]: crate::unstable::chain::chain
 /// [`fntools::compose`]: crate::compose
-pub fn chain<A, B, C, F, G>(f: F,  g: G) -> impl Fn(A) -> C
+pub fn chain<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C
 where
     F: Fn(A) -> B,
     G: Fn(B) -> C,
+{
+    move |a: A| g(f(a))
+}
+
+/// Chain two functions which can be called only once.
+///
+/// See [chain](self::chain) for documentation.
+pub fn chain_once<A, B, C, F, G>(f: F, g: G) -> impl FnOnce(A) -> C
+where
+    F: FnOnce(A) -> B,
+    G: FnOnce(B) -> C,
+{
+    move |a: A| g(f(a))
+}
+
+/// Chain two functions which can be called only by unique reference.
+///
+/// See [chain](self::chain) for documentation.
+pub fn chain_mut<A, B, C, F, G>(mut f: F, mut g: G) -> impl FnMut(A) -> C
+where
+    F: FnMut(A) -> B,
+    G: FnMut(B) -> C,
 {
     move |a: A| g(f(a))
 }
@@ -123,6 +167,28 @@ pub fn product<A, B, X, Y, F, G>(f: F, g: G) -> impl Fn(A, X) -> (B, Y)
 where
     F: Fn(A) -> B,
     G: Fn(X) -> Y,
+{
+    move |a: A, x: X| (f(a), g(x))
+}
+
+/// Cartesian product of functions which can be called only once.
+///
+/// See [product](self::product) for documentation.
+pub fn product_once<A, B, X, Y, F, G>(f: F, g: G) -> impl FnOnce(A, X) -> (B, Y)
+where
+    F: FnOnce(A) -> B,
+    G: FnOnce(X) -> Y,
+{
+    move |a: A, x: X| (f(a), g(x))
+}
+
+/// Cartesian product of functions which can be called only by unique reference.
+///
+/// See [product](self::product) for documentation.
+pub fn product_mut<A, B, X, Y, F, G>(mut f: F, mut g: G) -> impl FnMut(A, X) -> (B, Y)
+where
+    F: FnMut(A) -> B,
+    G: FnMut(X) -> Y,
 {
     move |a: A, x: X| (f(a), g(x))
 }
