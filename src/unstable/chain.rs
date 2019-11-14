@@ -3,7 +3,7 @@ use std::{
     marker::PhantomData,
 };
 
-use crate::auto_tuple::AutoTuple;
+use crate::tuple::auto_tuple::AutoTuple;
 
 /// Chain two functions.
 ///

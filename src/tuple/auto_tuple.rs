@@ -65,12 +65,12 @@ tuple_impls!(A, B, C, D, E, F, G, H, I, J, K, L,);
 
 #[cfg(test)]
 mod tests {
-    use crate::auto_tuple::AutoTuple;
+    use crate::tuple::auto_tuple::AutoTuple;
 
     /// Converts `val` to `U` using [`AutoTuple`] and compares it with `rhs`, if
     /// they are equal, return `true`, otherwise `false`.
     ///
-    /// [`AutoTuple`]: crate::auto_tuple::AutoTuple
+    /// [`AutoTuple`]: crate::tuple::auto_tuple::AutoTuple
     fn helper<T, U>(val: T, rhs: U) -> bool
     where
         T: AutoTuple<U>,

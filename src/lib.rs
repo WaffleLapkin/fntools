@@ -8,15 +8,21 @@ pub mod unstable;
 /// Extension for all types
 pub mod value;
 
-/// Helper for `unstable` things
-pub mod auto_tuple;
-/// Helper for `unstable` things
-pub mod flip_tuple;
-
-pub mod tuple_append;
-pub mod tuple_pop;
-pub mod tuple_push;
-pub mod tuple_take;
+/// Helpers for working with tuples
+pub mod tuple {
+    /// Append element to tuple (`T + (A, B) => (T, A, B)`)
+    pub mod append;
+    /// Convert everything to tuples (`A => (A,)`; `(A, B) => (A, B)`)
+    pub mod auto_tuple;
+    /// Flip tuple (`(A, B) => (B, A)`)
+    pub mod flip;
+    /// Pop element from tuple (`(A, B, T) => ((A, B), T)`)
+    pub mod pop;
+    /// Push element to tuple (`(A, B) + T => (A, B, T)`)
+    pub mod push;
+    /// Take element from tuple (`(T, A, B) => (T, (A, B))`)
+    pub mod take;
+}
 
 pub mod prelude {
     pub use crate::{chain, value::ValueExt};

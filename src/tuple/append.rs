@@ -2,7 +2,7 @@
 ///
 /// ## Example
 /// ```
-/// use fntools::tuple_append::TupleAppend;
+/// use fntools::tuple::append::TupleAppend;
 ///
 /// assert_eq!(().append(1), (1,));
 /// assert_eq!((999,).append("str"), ("str", 999));

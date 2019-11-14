@@ -2,7 +2,7 @@
 ///
 /// ## Example
 /// ```
-/// use fntools::tuple_push::TuplePush;
+/// use fntools::tuple::push::TuplePush;
 ///
 /// assert_eq!(().push(1), (1,));
 /// assert_eq!((999,).push("str"), (999, "str"));

@@ -4,7 +4,7 @@
 ///
 /// ## Examples
 /// ```
-/// use fntools::tuple_pop::TuplePop;
+/// use fntools::tuple::pop::TuplePop;
 ///
 /// assert_eq!((999,).pop(), ((), 999));
 /// assert_eq!((47, "str", 14usize).pop(), ((47, "str"), 14usize));

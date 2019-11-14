@@ -4,7 +4,7 @@
 ///
 /// ## Examples
 /// ```
-/// use fntools::tuple_take::TupleTake;
+/// use fntools::tuple::take::TupleTake;
 ///
 /// assert_eq!((999,).take(), (999, ()));
 /// assert_eq!((47, "str", 14usize).take(), (47, ("str", 14usize)));

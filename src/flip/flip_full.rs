@@ -1,4 +1,4 @@
-use crate::flip_tuple::FlipTuple;
+use crate::tuple::flip::FlipTuple;
 
 /// Flip both function arguments and output.
 ///

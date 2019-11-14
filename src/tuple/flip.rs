@@ -5,7 +5,7 @@
 ///
 /// ## Example
 /// ```
-/// use fntools::flip_tuple::FlipTuple;
+/// use fntools::tuple::flip::FlipTuple;
 ///
 /// assert_eq!((1, "hello").flip_tuple(), ("hello", 1));
 /// assert_eq!((true, 42, ()).flip_tuple(), ((), 42, true));
@@ -51,7 +51,7 @@ impl<A, B, C> FlipTuple for (A, B, C) {
 
 #[cfg(test)]
 mod tests {
-    use crate::flip_tuple::FlipTuple;
+    use crate::tuple::flip::FlipTuple;
 
     #[test]
     fn test() {

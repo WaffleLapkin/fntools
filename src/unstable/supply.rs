@@ -3,7 +3,7 @@ use std::{
     marker::PhantomData,
 };
 
-use crate::{tuple_append::TupleAppend, tuple_take::TupleTake};
+use crate::tuple::{append::TupleAppend, take::TupleTake};
 
 /// Supply argument to function
 ///
