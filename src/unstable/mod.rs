@@ -27,3 +27,4 @@ pub use compose::{compose, Compose};
 
 pub mod chain;
 pub mod compose;
+pub mod supply;
