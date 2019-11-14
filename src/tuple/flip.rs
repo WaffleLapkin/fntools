@@ -10,44 +10,11 @@
 /// assert_eq!((1, "hello").flip(), ("hello", 1));
 /// assert_eq!((true, 42, ()).flip(), ((), 42, true));
 /// ```
-/// ## Limitations
-/// By now there are implementations only for tuples of arity 3 or less
 pub trait FlipTuple {
     type Res;
 
     fn flip(self) -> Self::Res;
 }
-
-impl FlipTuple for () {
-    type Res = ();
-
-    fn flip(self) {}
-}
-
-impl<A> FlipTuple for (A,) {
-    type Res = (A,);
-
-    fn flip(self) -> Self::Res {
-        self
-    }
-}
-
-impl<A, B> FlipTuple for (A, B) {
-    type Res = (B, A);
-
-    fn flip(self) -> Self::Res {
-        (self.1, self.0)
-    }
-}
-
-impl<A, B, C> FlipTuple for (A, B, C) {
-    type Res = (C, B, A);
-
-    fn flip(self) -> Self::Res {
-        (self.2, self.1, self.0)
-    }
-}
-// TODO: macro gen
 
 #[cfg(test)]
 mod tests {
@@ -72,5 +39,124 @@ mod tests {
         // arity 3
         assert_eq!((10, "h", true).flip(), (true, "h", 10));
         assert_eq!((1, 2, 3).flip(), (3, 2, 1));
+
+        // arity 12
+        assert_eq!(
+            (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12).flip(),
+            (12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+        );
+    }
+}
+
+impl FlipTuple for () {
+    type Res = ();
+
+    fn flip(self) -> Self::Res {}
+}
+
+impl<A> FlipTuple for (A,) {
+    type Res = (A,);
+
+    fn flip(self) -> Self::Res {
+        (self.0,)
+    }
+}
+
+impl<A, B> FlipTuple for (A, B) {
+    type Res = (B, A);
+
+    fn flip(self) -> Self::Res {
+        (self.1, self.0)
+    }
+}
+
+impl<A, B, C> FlipTuple for (A, B, C) {
+    type Res = (C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (self.2, self.1, self.0)
+    }
+}
+
+impl<A, B, C, D> FlipTuple for (A, B, C, D) {
+    type Res = (D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (self.3, self.2, self.1, self.0)
+    }
+}
+
+impl<A, B, C, D, E> FlipTuple for (A, B, C, D, E) {
+    type Res = (E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (self.4, self.3, self.2, self.1, self.0)
+    }
+}
+
+impl<A, B, C, D, E, F> FlipTuple for (A, B, C, D, E, F) {
+    type Res = (F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (self.5, self.4, self.3, self.2, self.1, self.0)
+    }
+}
+
+impl<A, B, C, D, E, F, G> FlipTuple for (A, B, C, D, E, F, G) {
+    type Res = (G, F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (self.6, self.5, self.4, self.3, self.2, self.1, self.0)
+    }
+}
+
+impl<A, B, C, D, E, F, G, H> FlipTuple for (A, B, C, D, E, F, G, H) {
+    type Res = (H, G, F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (
+            self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
+        )
+    }
+}
+
+impl<A, B, C, D, E, F, G, H, I> FlipTuple for (A, B, C, D, E, F, G, H, I) {
+    type Res = (I, H, G, F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (
+            self.8, self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
+        )
+    }
+}
+
+impl<A, B, C, D, E, F, G, H, I, J> FlipTuple for (A, B, C, D, E, F, G, H, I, J) {
+    type Res = (J, I, H, G, F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (
+            self.9, self.8, self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
+        )
+    }
+}
+
+impl<A, B, C, D, E, F, G, H, I, J, K> FlipTuple for (A, B, C, D, E, F, G, H, I, J, K) {
+    type Res = (K, J, I, H, G, F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (
+            self.10, self.9, self.8, self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
+        )
+    }
+}
+
+impl<A, B, C, D, E, F, G, H, I, J, K, L> FlipTuple for (A, B, C, D, E, F, G, H, I, J, K, L) {
+    type Res = (L, K, J, I, H, G, F, E, D, C, B, A);
+
+    fn flip(self) -> Self::Res {
+        (
+            self.11, self.10, self.9, self.8, self.7, self.6, self.5, self.4, self.3, self.2,
+            self.1, self.0,
+        )
     }
 }

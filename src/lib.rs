@@ -1,5 +1,8 @@
 #![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
 
+#[macro_use]
+mod local_macros;
+
 /// Flipping function arguments/output/both
 pub mod flip;
 /// Features that uses nightly-only unstable API
@@ -9,6 +12,14 @@ pub mod unstable;
 pub mod value;
 
 /// Helpers for working with tuples
+///
+/// **Note**: in all of the traits there is no tuples of arity >= 13 (neither in requirements
+/// neither in return types). It's because Rust current type system can't express "tuple of any
+/// size" (see [Draft RFC: variadic generics] for proposes how to fix this) so this lib follows the
+/// [stdlib] in implementing traits on tuples of arity 12 or less.
+///
+/// [Draft RFC: variadic generics]: https://github.com/rust-lang/rfcs/issues/376
+/// [stdlib]: https://doc.rust-lang.org/std/primitive.tuple.html#trait-implementations
 pub mod tuple {
     /// Append element to tuple (`T + (A, B) => (T, A, B)`)
     pub mod append;

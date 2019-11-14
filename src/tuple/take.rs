@@ -37,29 +37,17 @@ impl<T> TupleTake for (T,) {
     }
 }
 
-impl<T, A> TupleTake for (T, A) {
-    type Rem = (A,);
-    type Take = T;
+macro_rules! tuple_impl {
+    ($( $types:ident [$e:tt], )*) => {
+        impl<T, $( $types, )*> TupleTake for (T, $( $types, )*) {
+            type Rem = ($( $types, )*);
+            type Take = T;
 
-    fn take(self) -> (Self::Take, Self::Rem) {
-        (self.0, (self.1,))
-    }
+            fn take(self) -> (Self::Take, Self::Rem) {
+                (self.0, ($( self.$e, )*))
+            }
+        }
+    };
 }
 
-impl<T, A, B> TupleTake for (T, A, B) {
-    type Rem = (A, B);
-    type Take = T;
-
-    fn take(self) -> (Self::Take, Self::Rem) {
-        (self.0, (self.1, self.2))
-    }
-}
-
-impl<T, A, B, C> TupleTake for (T, A, B, C) {
-    type Rem = (A, B, C);
-    type Take = T;
-
-    fn take(self) -> (Self::Take, Self::Rem) {
-        (self.0, (self.1, self.2, self.3))
-    }
-}
+for_tuples_tt!(A [1], B [2], C [3], D [4], E [5], F [6], G [7], H [8], I [9], J [10], K [11], # tuple_impl);

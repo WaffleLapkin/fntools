@@ -23,26 +23,16 @@ impl<T> TupleAppend<T> for () {
     }
 }
 
-impl<T, A> TupleAppend<T> for (A,) {
-    type Res = (T, A);
+macro_rules! tuple_impl {
+    ($( $types:ident [$e:tt], )*) => {
+        impl<T, $( $types, )*> TupleAppend<T> for ($( $types, )*) {
+            type Res = (T, $( $types, )*);
 
-    fn append(self, element: T) -> (T, A) {
-        (element, self.0)
-    }
+            fn append(self, element: T) -> Self::Res {
+                (element, $( self.$e, )*)
+            }
+        }
+    };
 }
 
-impl<T, A, B> TupleAppend<T> for (A, B) {
-    type Res = (T, A, B);
-
-    fn append(self, element: T) -> (T, A, B) {
-        (element, self.0, self.1)
-    }
-}
-
-impl<T, A, B, C> TupleAppend<T> for (A, B, C) {
-    type Res = (T, A, B, C);
-
-    fn append(self, element: T) -> (T, A, B, C) {
-        (element, self.0, self.1, self.2)
-    }
-}
+for_tuples_tt!(A [0], B [1], C [2], D [3], E [4], F [5], G [6], H[7], I[8], J[9], K[10], # tuple_impl);
