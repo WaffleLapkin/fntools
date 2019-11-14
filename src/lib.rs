@@ -13,6 +13,11 @@ pub mod auto_tuple;
 /// Helper for `unstable` things
 pub mod flip_tuple;
 
+pub mod tuple_append;
+pub mod tuple_pop;
+pub mod tuple_push;
+pub mod tuple_take;
+
 pub mod prelude {
     pub use crate::{chain, value::ValueExt};
 }
