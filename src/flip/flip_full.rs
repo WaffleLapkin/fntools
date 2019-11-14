@@ -19,7 +19,7 @@ pub fn flip_full<A, B, C, D, F>(f: F) -> impl Fn(B, A) -> (D, C)
 where
     F: Fn(A, B) -> (C, D),
 {
-    move |b: B, a: A| f(a, b).flip_tuple()
+    move |b: B, a: A| f(a, b).flip()
 }
 
 /// Flip both function (which can be called only once) arguments and output.
@@ -29,7 +29,7 @@ pub fn flip_full_once<A, B, C, D, F>(f: F) -> impl FnOnce(B, A) -> (D, C)
 where
     F: FnOnce(A, B) -> (C, D),
 {
-    move |b: B, a: A| f(a, b).flip_tuple()
+    move |b: B, a: A| f(a, b).flip()
 }
 
 /// Flip both function (which can be called only by unique reference) arguments
@@ -40,5 +40,5 @@ pub fn flip_full_mut<A, B, C, D, F>(mut f: F) -> impl FnMut(B, A) -> (D, C)
 where
     F: FnMut(A, B) -> (C, D),
 {
-    move |b: B, a: A| f(a, b).flip_tuple()
+    move |b: B, a: A| f(a, b).flip()
 }

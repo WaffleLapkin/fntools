@@ -19,7 +19,7 @@ pub fn flip_output<A, B, C, F>(f: F) -> impl Fn(A) -> (C, B)
 where
     F: Fn(A) -> (B, C),
 {
-    move |a: A| f(a).flip_tuple()
+    move |a: A| f(a).flip()
 }
 
 /// Flip function (which can be called only once) output.
@@ -29,7 +29,7 @@ pub fn flip_output_once<A, B, C, F>(f: F) -> impl FnOnce(A) -> (C, B)
 where
     F: FnOnce(A) -> (B, C),
 {
-    move |a: A| f(a).flip_tuple()
+    move |a: A| f(a).flip()
 }
 
 /// Flip function (which can be called only by unique reference) output.
@@ -39,5 +39,5 @@ pub fn flip_output_mut<A, B, C, F>(mut f: F) -> impl FnMut(A) -> (C, B)
 where
     F: FnMut(A) -> (B, C),
 {
-    move |a: A| f(a).flip_tuple()
+    move |a: A| f(a).flip()
 }
