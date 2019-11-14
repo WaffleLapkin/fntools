@@ -210,7 +210,7 @@ where
     G: Debug,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        f.debug_struct("Chain")
+        f.debug_struct("Compose")
             .field("f", &self.0)
             .field("g", &self.1)
             .finish()
