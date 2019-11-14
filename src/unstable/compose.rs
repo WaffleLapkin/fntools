@@ -64,11 +64,11 @@ use crate::tuple::auto_tuple::AutoTuple;
 /// [second example]: #second_example
 /// [`FnExtCompose::compose`]: crate::unstable::compose::FnExtCompose::compose
 /// [`fntools::compose`]: crate::compose
-pub fn compose<A, B, C, D, F, G>(f: F, g: G) -> Compose<F, G, C>
+pub fn compose<A, C, F, G>(f: F, g: G) -> Compose<F, G, C>
 where
-    F: FnOnce<C, Output = D>,
-    G: FnOnce<A, Output = B>,
-    B: AutoTuple<C>,
+    F: FnOnce<C>,
+    G: FnOnce<A>,
+    G::Output: AutoTuple<C>,
 {
     Compose::new(f, g)
 }
@@ -78,17 +78,17 @@ where
 /// Note: `Compose` and [`Chain`] have no differences but argument order.
 ///
 /// ## Why C?
-/// `F` and `G` generic params are functions and `C` is args-type of `G`.
+/// `F` and `G` generic params are functions and `C` is args-type of `F`.
 ///
 /// > Why `C` is here, but `A`, `B`, `D` - not?
 ///
-/// Because `A`, `B`, `D` are constrained parameters in impl:
+/// Because `A` is constrained in impl:
 /// ```ignore
-/// impl<A, B, C, D, F, G> FnOnce<A> /* A constrained */ for Compose<F, G, C>
-///     where
-///         F: FnOnce<C, Output = D>, /* D constrained */
-///         G: FnOnce<A, Output = B>, /* B constrained */
-///         B: AutoTuple<C>,
+/// impl<A, C, F, G> FnOnce<A /* <-- */> for Compose<F, G, C>
+/// where
+///     F: FnOnce<C>,
+///     G::Output: AutoTuple<C>,
+///     G: FnOnce<A>,
 /// ```
 /// But `C` is not. To Fix this `C` was added to `Chain` struct.
 ///
@@ -97,11 +97,11 @@ where
 pub struct Compose<F, G, C>(F, G, PhantomData<dyn Fn(C)>);
 
 impl<F, G, C> Compose<F, G, C> {
-    pub fn new<A, B, D>(f: F, g: G) -> Self
+    pub fn new<A>(f: F, g: G) -> Self
     where
-        F: FnOnce<C, Output = D>,
-        G: FnOnce<A, Output = B>,
-        B: AutoTuple<C>,
+        F: FnOnce<C>,
+        G::Output: AutoTuple<C>,
+        G: FnOnce<A>,
     {
         Compose(f, g, PhantomData)
     }
@@ -112,58 +112,63 @@ impl<F, G, C> Compose<F, G, C> {
     }
 }
 
-impl<A, B, C, D, F, G> FnOnce<A> for Compose<F, G, C>
+// F: C -> D
+// G: A -> B
+// B => C
+//
+// `B => C` needed for auto-tupling (needed for composing (A, B) -> _ and _ -> (A, B))
+impl<A, C, F, G> FnOnce<A> for Compose<F, G, C>
 where
-    F: FnOnce<C, Output = D>,
-    G: FnOnce<A, Output = B>,
-    B: AutoTuple<C>,
+    F: FnOnce<C>,
+    G::Output: AutoTuple<C>,
+    G: FnOnce<A>,
 {
-    type Output = D;
+    type Output = F::Output;
 
     #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call_once(self, args: A) -> Self::Output {
         let Compose(f, g, _) = self;
-        let b: B = g.call_once(args);
+        let b: G::Output = g.call_once(args);
         let c: C = b.auto_tuple();
-        let d: D = f.call_once(c);
+        let d: F::Output = f.call_once(c);
         d
     }
 }
 
-impl<A, B, C, D, F, G> FnMut<A> for Compose<F, G, C>
+impl<A, C, F, G> FnMut<A> for Compose<F, G, C>
 where
-    F: FnMut<C, Output = D>,
-    G: FnMut<A, Output = B>,
-    B: AutoTuple<C>,
+    F: FnMut<C>,
+    G::Output: AutoTuple<C>,
+    G: FnMut<A>,
 {
     #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call_mut(&mut self, args: A) -> Self::Output {
         let Compose(f, g, _) = self;
-        let b: B = g.call_mut(args);
+        let b: G::Output = g.call_mut(args);
         let c: C = b.auto_tuple();
-        let d: D = f.call_mut(c);
+        let d: F::Output = f.call_mut(c);
         d
     }
 }
 
-impl<A, B, C, D, F, G> Fn<A> for Compose<F, G, C>
+impl<A, C, F, G> Fn<A> for Compose<F, G, C>
 where
-    F: Fn<C, Output = D>,
-    G: Fn<A, Output = B>,
-    B: AutoTuple<C>,
+    F: Fn<C>,
+    G::Output: AutoTuple<C>,
+    G: Fn<A>,
 {
     #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call(&self, args: A) -> Self::Output {
         let Compose(f, g, _) = self;
-        let b: B = g.call(args);
+        let b: G::Output = g.call(args);
         let c: C = b.auto_tuple();
-        let d: D = f.call(c);
+        let d: F::Output = f.call(c);
         d
     }
 }
 
 /// `.compose` extension for Fn* types
-pub trait FnExtCompose<C, D> {
+pub trait FnExtCompose<C, D>: Sized {
     /// Compose two functions (`self ∘ g`)
     ///
     /// # Examples:
@@ -183,22 +188,20 @@ pub trait FnExtCompose<C, D> {
     /// For more info see [`compose`]
     ///
     /// [`compose`]: crate::unstable::compose::compose
-    fn compose<A, B, G>(self, g: G) -> Compose<Self, G, C>
+    fn compose<A, G>(self, g: G) -> Compose<Self, G, C>
     where
-        Self: Sized,
-        G: FnOnce<A, Output = B>,
-        B: AutoTuple<C>;
+        G: FnOnce<A>,
+        G::Output: AutoTuple<C>;
 }
 
-impl<C, D, F> FnExtCompose<C, D> for F
+impl<C, F> FnExtCompose<C, F::Output> for F
 where
-    F: FnOnce<C, Output = D>,
+    F: FnOnce<C>,
 {
-    fn compose<A, B, G>(self, g: G) -> Compose<Self, G, C>
+    fn compose<A, G>(self, g: G) -> Compose<Self, G, C>
     where
-        Self: Sized,
-        G: FnOnce<A, Output = B>,
-        B: AutoTuple<C>,
+        G: FnOnce<A>,
+        G::Output: AutoTuple<C>,
     {
         compose(self, g)
     }

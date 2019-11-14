@@ -64,11 +64,11 @@ use crate::tuple::auto_tuple::AutoTuple;
 /// [second example]: #second_example
 /// [`FnExtChain::chain`]: crate::unstable::chain::FnExtChain::chain
 /// [`fntools::chain`]: crate::chain
-pub fn chain<A, B, C, D, F, G>(f: F, g: G) -> Chain<F, G, C>
+pub fn chain<A, C, F, G>(f: F, g: G) -> Chain<F, G, C>
 where
-    F: FnOnce<A, Output = B>,
-    G: FnOnce<C, Output = D>,
-    B: AutoTuple<C>,
+    F: FnOnce<A>,
+    G: FnOnce<C>,
+    F::Output: AutoTuple<C>,
 {
     Chain::new(f, g)
 }
@@ -80,15 +80,15 @@ where
 /// ## Why C?
 /// `F` and `G` generic params are functions and `C` is args-type of `G`.
 ///
-/// > Why `C` is here, but `A`, `B`, `D` - not?
+/// > Why `C` is here, but `A`  - not?
 ///
-/// Because `A`, `B`, `D` are constrained parameters in impl:
+/// Because `A` is constrained in impl:
 /// ```ignore
-/// impl<A, B, C, D, F, G> FnOnce<A> /* A constrained */ for Chain<F, G>
+/// impl<A, C, F, G> FnOnce<A /* <-- */> for Chain<F, G, C>
 /// where
-///     F: FnOnce<A, Output = B>, /* B constrained */
-///     G: FnOnce<C, Output = D>, /* D constrained */
-///     B: AutoTuple<C>,
+///     F: FnOnce<A>,
+///     F::Output: AutoTuple<C>,
+///     G: FnOnce<C>,
 /// ```
 /// But `C` is not. To Fix this `C` was added to `Chain` struct.
 ///
@@ -97,11 +97,11 @@ where
 pub struct Chain<F, G, C>(F, G, PhantomData<dyn Fn(C)>);
 
 impl<F, G, C> Chain<F, G, C> {
-    pub fn new<A, B, D>(f: F, g: G) -> Self
+    pub fn new<A>(f: F, g: G) -> Self
     where
-        F: FnOnce<A, Output = B>,
-        G: FnOnce<C, Output = D>,
-        B: AutoTuple<C>,
+        F: FnOnce<A>,
+        F::Output: AutoTuple<C>,
+        G: FnOnce<C>,
     {
         Chain(f, g, PhantomData)
     }
@@ -112,58 +112,63 @@ impl<F, G, C> Chain<F, G, C> {
     }
 }
 
-impl<A, B, C, D, F, G> FnOnce<A> for Chain<F, G, C>
+// F: A -> B
+// G: C -> D
+// B => C
+//
+// `B => C` needed for auto-tupling (needed for chaining _ -> (A, B) and (A, B) -> _)
+impl<A, C, F, G> FnOnce<A> for Chain<F, G, C>
 where
-    F: FnOnce<A, Output = B>,
-    G: FnOnce<C, Output = D>,
-    B: AutoTuple<C>,
+    F: FnOnce<A>,
+    F::Output: AutoTuple<C>,
+    G: FnOnce<C>,
 {
-    type Output = D;
+    type Output = G::Output;
 
     #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call_once(self, args: A) -> Self::Output {
         let Chain(f, g, _) = self;
-        let b: B = f.call_once(args);
+        let b: F::Output = f.call_once(args);
         let c: C = b.auto_tuple();
-        let d: D = g.call_once(c);
+        let d: G::Output = g.call_once(c);
         d
     }
 }
 
-impl<A, B, C, D, F, G> FnMut<A> for Chain<F, G, C>
+impl<A, C, F, G> FnMut<A> for Chain<F, G, C>
 where
-    F: FnMut<A, Output = B>,
-    G: FnMut<C, Output = D>,
-    B: AutoTuple<C>,
+    F: FnMut<A>,
+    F::Output: AutoTuple<C>,
+    G: FnMut<C>,
 {
     #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call_mut(&mut self, args: A) -> Self::Output {
         let Chain(f, g, _) = self;
-        let b: B = f.call_mut(args);
+        let b: F::Output = f.call_mut(args);
         let c: C = b.auto_tuple();
-        let d: D = g.call_mut(c);
+        let d: G::Output = g.call_mut(c);
         d
     }
 }
 
-impl<A, B, C, D, F, G> Fn<A> for Chain<F, G, C>
+impl<A, C, F, G> Fn<A> for Chain<F, G, C>
 where
-    F: Fn<A, Output = B>,
-    G: Fn<C, Output = D>,
-    B: AutoTuple<C>,
+    F: Fn<A>,
+    F::Output: AutoTuple<C>,
+    G: Fn<C>,
 {
     #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call(&self, args: A) -> Self::Output {
         let Chain(f, g, _) = self;
-        let b: B = f.call(args);
+        let b: F::Output = f.call(args);
         let c: C = b.auto_tuple();
-        let d: D = g.call(c);
+        let d: G::Output = g.call(c);
         d
     }
 }
 
 /// `.chain` extension for Fn* types
-pub trait FnExtChain<A, B> {
+pub trait FnExtChain<A, B>: Sized {
     /// Chain two functions (`g ∘ self`)
     ///
     /// # Examples:
@@ -183,22 +188,20 @@ pub trait FnExtChain<A, B> {
     /// For more info see [`chain`]
     ///
     /// [`chain`]: crate::unstable::chain::chain
-    fn chain<C, D, G>(self, g: G) -> Chain<Self, G, C>
+    fn chain<C, G>(self, g: G) -> Chain<Self, G, C>
     where
-        Self: Sized,
-        G: FnOnce<C, Output = D>,
+        G: FnOnce<C>,
         B: AutoTuple<C>;
 }
 
-impl<A, B, F> FnExtChain<A, B> for F
+impl<A, F> FnExtChain<A, F::Output> for F
 where
-    F: FnOnce<A, Output = B>,
+    F: FnOnce<A>,
 {
-    fn chain<C, D, G>(self, g: G) -> Chain<Self, G, C>
+    fn chain<C, G>(self, g: G) -> Chain<Self, G, C>
     where
-        Self: Sized,
-        G: FnOnce<C, Output = D>,
-        B: AutoTuple<C>,
+        G: FnOnce<C>,
+        F::Output: AutoTuple<C>,
     {
         chain(self, g)
     }
