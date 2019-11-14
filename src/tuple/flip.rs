@@ -1,5 +1,7 @@
 #![allow(clippy::unit_cmp)]
 
+use crate::sealed::Sealed;
+
 /// Flips tuple, so first element becomes last, last becomes first, 2-nd becomes
 /// 2-nd from the end and so on.
 ///
@@ -10,7 +12,7 @@
 /// assert_eq!((1, "hello").flip(), ("hello", 1));
 /// assert_eq!((true, 42, ()).flip(), ((), 42, true));
 /// ```
-pub trait FlipTuple {
+pub trait FlipTuple: Sealed {
     type Res;
 
     fn flip(self) -> Self::Res;

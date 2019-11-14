@@ -1,3 +1,5 @@
+use crate::sealed::Sealed;
+
 /// Push element to the **end** of the tuple, producing new tuple.
 ///
 /// ## Example
@@ -8,7 +10,7 @@
 /// assert_eq!((999,).push("str"), (999, "str"));
 /// assert_eq!((47, "str", 14usize).push(true), (47, "str", 14usize, true));
 /// ```
-pub trait TuplePush<T> {
+pub trait TuplePush<T>: Sealed {
     /// Result of pushing element `E` to tuple `Self`
     type Res;
 

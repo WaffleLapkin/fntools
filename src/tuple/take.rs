@@ -1,3 +1,5 @@
+use crate::sealed::Sealed;
+
 /// Takes element from the **start** of the tuple, producing new tuple.
 ///
 /// Return tuple of taked element and remaining tuple.
@@ -17,7 +19,7 @@
 /// // so this code won't be compiled
 /// assert_eq!(().take(), ());
 /// ```
-pub trait TupleTake {
+pub trait TupleTake: Sealed {
     /// Remaining part of the tuple, after taking an element
     type Rem;
 

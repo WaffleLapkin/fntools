@@ -1,3 +1,5 @@
+use crate::sealed::Sealed;
+
 /// Popes element from the **end** of the tuple, producing new tuple.
 ///
 /// Return tuple of remaining tuple and poped element.
@@ -17,7 +19,7 @@
 /// // so this code won't be compiled
 /// assert_eq!(().pop(), ());
 /// ```
-pub trait TuplePop {
+pub trait TuplePop: Sealed {
     /// Remaining part of the tuple, after popping an element
     type Rem;
 

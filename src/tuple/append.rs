@@ -1,3 +1,5 @@
+use crate::sealed::Sealed;
+
 /// Append element to the **start** of the tuple, producing new tuple.
 ///
 /// ## Example
@@ -8,7 +10,7 @@
 /// assert_eq!((999,).append("str"), ("str", 999));
 /// assert_eq!((47, "str", 14usize).append(true), (true, 47, "str", 14usize));
 /// ```
-pub trait TupleAppend<E> {
+pub trait TupleAppend<E>: Sealed {
     /// Result of the appending element `E` to tuple `Self`
     type Res;
 

@@ -214,3 +214,17 @@ where
 {
     move |a: A, x: X| (f(a), g(x))
 }
+
+mod sealed {
+    pub trait Sealed {}
+
+    impl Sealed for () {}
+
+    macro_rules! tuple_impl {
+        ($( $types:ident, )*) => {
+            impl<$( $types, )*> Sealed for ($( $types, )*) {}
+        };
+    }
+
+    for_tuples!(A, B, C, D, E, F, G, H, I, J, K, L, # tuple_impl);
+}
