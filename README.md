@@ -8,7 +8,7 @@
 [![crates.io](https://img.shields.io/badge/crates.io-v0.1.0-orange.svg)](https://crates.io/crates/fntools)
 
 
-<img height="256" width="256" align="left" src="./logo.svg" alt="logo"> Tools for working with functions in rust <pre lang="rust">let fun = (|a, b| a + b)
+<img height="256" width="256" align="left" src="./logo.svg" alt="logo"> Weird tools for working with functions in rust <pre lang="rust">let fun = (|a, b| a + b)
 &nbsp;   .chain(|x| (x % 2, x % 4))
 &nbsp;   .chain(|t, f| (t, f)
 &nbsp;        .also(|(t, f)| println!("{}, {}", t, f))
@@ -18,6 +18,6 @@ assert_eq!(fun(13, 10), (1, 3));
 </pre>
 <br><br>
 ## DISCLAIMER
-This library more an fun experiment with rust, then really useful library.
+This library more an fun experiment with rust, than really useful library.
 
 However, in some cases it can make code a bit cleaner.
