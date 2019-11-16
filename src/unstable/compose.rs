@@ -1,18 +1,12 @@
-use std::{
-    fmt::{Debug, Error, Formatter},
-    marker::PhantomData,
-};
-
-use crate::tuple::auto_tuple::AutoTuple;
-
 /// Compose two functions.
 ///
-/// Takes functions f and g and returns `f ∘ g` (in other words something
-/// like `|a: A| f(g(a))`.
+/// Takes functions `f` and `g` and returns `f ∘ g` (in other words something
+/// _like_ `|a: A| f(g(a))`.
 ///
 /// # Examples:
+///
 /// ```
-/// use fntools::unstable::compose;
+/// use fntools::unstable::compose::compose;
 ///
 /// let add_two = |a: i32| a + 2;
 /// let add_three = |a: i32| a + 3;
@@ -21,218 +15,89 @@ use crate::tuple::auto_tuple::AutoTuple;
 /// assert_eq!(add_five(4), 9);
 /// ```
 ///
-/// <a name="second_example"></a> `compose` also work with multi-argument
-/// functions:
-/// ```
-/// use fntools::unstable::compose;
-///
-/// // very bad impl of `checked_add`
-/// let my_checked_add =  compose(|res, over| if over { None } else { Some(res) }, i32::overflowing_add);
-/// // note: no destructing needed ^^^^^^^^^                  return `(i32, bool)` ---- ^^^^^^^^^^^^^^^
-/// assert_eq!(my_checked_add(8, 16), Some(24));
-/// assert_eq!(my_checked_add(std::i32::MAX, 1), None);
-/// ```
-///
-/// Note the order:
-/// ```
-/// use fntools::unstable::compose;
-///
-/// let to_16 = |i: i8| i16::from(i);
-/// let to_32 = |i: i16| i32::from(i);
-/// let to_64 = |i: i32| i64::from(i);
-///
-/// // execution order: to_16 -> to_32 -> to_64
-/// let i8_to_i64 = compose(compose(to_64, to_32), to_16);
-///
-/// assert_eq!(i8_to_i64(8i8), 8i64);
-/// ```
-///
-/// # unstable
-/// This function is 'unstable' because it uses nightly only unstable
-/// features: [`unboxed_closures`] and [`fn_traits`] ([tracking issue])
-///
-/// This gives possibility to work with multi-argument functions
-/// (see [second example])
-///
 /// See also:
 /// - stable version of this function: [`fntools::compose`]
-/// - extension on all functions: [`FnExtCompose::compose`]
+/// - not untupling version of this function: [`compose`]
+/// - extension on all functions: [`FnExt::compose`]
 ///
-/// [`fn_traits`]: https://doc.rust-lang.org/unstable-book/library-features/fn-traits.html
-/// [`unboxed_closures`]: https://doc.rust-lang.org/unstable-book/language-features/unboxed-closures.html
-/// [tracking issue]: https://github.com/rust-lang/rust/issues/29625
-/// [second example]: #second_example
-/// [`FnExtCompose::compose`]: crate::unstable::compose::FnExtCompose::compose
+///
+/// [`FnExt::compose`]: crate::unstable::ext::FnExt::compose
+/// [`compose`]: super::compose::compose
 /// [`fntools::compose`]: crate::compose
-pub fn compose<A, C, F, G>(f: F, g: G) -> Compose<F, G, C>
+pub fn compose<A, F, G>(f: F, g: G) -> Compose<F, G>
 where
-    F: FnOnce<C>,
+    F: FnOnce<(G::Output,)>,
     G: FnOnce<A>,
-    G::Output: AutoTuple<C>,
 {
     Compose::new(f, g)
 }
 
 /// Represent composition of 2 functions `F ∘ G`
 ///
-/// Note: `Compose` and [`Chain`] have no differences but argument order.
+/// For documentation see [`compose`]
 ///
-/// ## Why C?
-/// `F` and `G` generic params are functions and `C` is args-type of `F`.
-///
-/// > Why `C` is here, but `A`, `B`, `D` - not?
-///
-/// Because `A` is constrained in impl:
-/// ```ignore
-/// impl<A, C, F, G> FnOnce<A /* <-- */> for Compose<F, G, C>
-/// where
-///     F: FnOnce<C>,
-///     G::Output: AutoTuple<C>,
-///     G: FnOnce<A>,
-/// ```
-/// But `C` is not. To Fix this `C` was added to `Chain` struct.
-///
-/// [`Chain`]: crate::unstable::chain::Chain
+/// [`compose`]: self::compose
 #[must_use = "function combinators are lazy and do nothing unless called"]
-pub struct Compose<F, G, C>(F, G, PhantomData<dyn Fn(C)>);
+#[derive(Debug, Clone, Copy)]
+pub struct Compose<F, G>(F, G);
 
-impl<F, G, C> Compose<F, G, C> {
+impl<F, G> Compose<F, G> {
     pub fn new<A>(f: F, g: G) -> Self
     where
-        F: FnOnce<C>,
-        G::Output: AutoTuple<C>,
+        F: FnOnce<(G::Output,)>,
         G: FnOnce<A>,
     {
-        Compose(f, g, PhantomData)
+        Compose(f, g)
     }
 
     pub fn into_inner(self) -> (F, G) {
-        let Compose(f, g, _) = self;
+        let Compose(f, g) = self;
+        (f, g)
+    }
+
+    pub fn as_inner(&self) -> (&F, &G) {
+        let Compose(f, g) = self;
         (f, g)
     }
 }
 
-// F: C -> D
-// G: A -> B
-// B => C
-//
-// `B => C` needed for auto-tupling (needed for composing (A, B) -> _ and _ -> (A, B))
-impl<A, C, F, G> FnOnce<A> for Compose<F, G, C>
+impl<A, F, G> FnOnce<A> for Compose<F, G>
 where
-    F: FnOnce<C>,
-    G::Output: AutoTuple<C>,
+    F: FnOnce<(G::Output,)>,
     G: FnOnce<A>,
 {
     type Output = F::Output;
 
-    #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call_once(self, args: A) -> Self::Output {
-        let Compose(f, g, _) = self;
+        let Compose(f, g) = self;
         let b: G::Output = g.call_once(args);
-        let c: C = b.auto_tuple();
-        let d: F::Output = f.call_once(c);
-        d
+        let c: F::Output = f(b);
+        c
     }
 }
 
-impl<A, C, F, G> FnMut<A> for Compose<F, G, C>
+impl<A, F, G> FnMut<A> for Compose<F, G>
 where
-    F: FnMut<C>,
-    G::Output: AutoTuple<C>,
+    F: FnMut<(G::Output,)>,
     G: FnMut<A>,
 {
-    #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call_mut(&mut self, args: A) -> Self::Output {
-        let Compose(f, g, _) = self;
+        let Compose(f, g) = self;
         let b: G::Output = g.call_mut(args);
-        let c: C = b.auto_tuple();
-        let d: F::Output = f.call_mut(c);
-        d
+        let c: F::Output = f(b);
+        c
     }
 }
 
-impl<A, C, F, G> Fn<A> for Compose<F, G, C>
+impl<A, F, G> Fn<A> for Compose<F, G>
 where
-    F: Fn<C>,
-    G::Output: AutoTuple<C>,
+    F: Fn<(G::Output,)>,
     G: Fn<A>,
 {
-    #[allow(clippy::many_single_char_names)]
     extern "rust-call" fn call(&self, args: A) -> Self::Output {
-        let Compose(f, g, _) = self;
+        let Compose(f, g) = self;
         let b: G::Output = g.call(args);
-        let c: C = b.auto_tuple();
-        let d: F::Output = f.call(c);
-        d
+        let c: F::Output = f(b);
+        c
     }
-}
-
-/// `.compose` extension for Fn* types
-pub trait FnExtCompose<C, D>: Sized {
-    /// Compose two functions (`self ∘ g`)
-    ///
-    /// # Examples:
-    /// ```
-    /// // or `::unstable::fn_extensions::*`
-    /// use fntools::unstable::compose::FnExtCompose;
-    ///
-    /// let add_two = |a: i32| a + 2;
-    /// let add_three = |a: i32| a + 3;
-    /// let add_eight = add_two
-    ///     .compose(add_three)
-    ///     .compose(add_three);
-    ///
-    /// assert_eq!(add_eight(4), 12);
-    /// ```
-    ///
-    /// For more info see [`compose`]
-    ///
-    /// [`compose`]: crate::unstable::compose::compose
-    fn compose<A, G>(self, g: G) -> Compose<Self, G, C>
-    where
-        G: FnOnce<A>,
-        G::Output: AutoTuple<C>;
-}
-
-impl<C, F> FnExtCompose<C, F::Output> for F
-where
-    F: FnOnce<C>,
-{
-    fn compose<A, G>(self, g: G) -> Compose<Self, G, C>
-    where
-        G: FnOnce<A>,
-        G::Output: AutoTuple<C>,
-    {
-        compose(self, g)
-    }
-}
-
-impl<F, G, C> Debug for Compose<F, G, C>
-where
-    F: Debug,
-    G: Debug,
-{
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        f.debug_struct("Compose")
-            .field("f", &self.0)
-            .field("g", &self.1)
-            .finish()
-    }
-}
-
-impl<F, G, C> Clone for Compose<F, G, C>
-where
-    F: Clone,
-    G: Clone,
-{
-    fn clone(&self) -> Self {
-        Compose(self.0.clone(), self.1.clone(), PhantomData)
-    }
-}
-
-impl<F, G, C> Copy for Compose<F, G, C>
-where
-    F: Copy,
-    G: Copy,
-{
 }

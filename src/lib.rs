@@ -1,3 +1,71 @@
+//! ## Tools for working with functions
+//! e.g.:
+//! - chaining
+//! - composing
+//! - applying to values
+//! - supplying arguments
+//! - currying (O_O)
+//! - Flipping arguments/output/both
+//! - Cartesian product of functions
+//! - Untupling (running a function `(A, B) -> _` on _argument_ `(A, B)`)
+//!
+//! ## DISCLAIMER
+//! This library more an fun experiment with rust, than really useful library.
+//!
+//! However, in some cases it can make code a bit cleaner.
+//!
+//! ## Alternatives
+//! Similar libraries:
+//! - [tool](https://stebalien.github.io/tool-rs/tool/index.html)
+//! - [compose](https://docs.rs/compose/0.1.0/compose/)
+//!
+//! You know other alternatives? - ping me in [telegram] or open issue on [github]!
+//!
+//! ## Stability
+//! This library can work on both `stable` and `nightly` _however_ without
+//! nightly it loses **a lot** of core functionality.
+//!
+//! To build on `stable` you need to add `"stable"` feature:
+//! ```toml
+//! // Cargo.toml
+//! fntools = { version = "0.1.0", features = ["stable"] }
+//! ```
+//! This will remove [`unstable`] module with all the APIs which use
+//! nightly-only unstable API.
+//!
+//! ## Unstable API
+//! Unstable API provides these features:
+//! - Multi-argument working (this uses a lot of hacks, but works!)
+//!   + You can e.g. chain `(A, B) -> C` and `C -> D` to receive `(A, B) -> D`
+//!   + You can e.g. chain `A -> (B, C)` and `(B, C) -> D`to receive `A -> D`
+//!   + You can e.g. product `(A, B) -> C` and `X -> Y` to receive `(A, B, X) -> (C, Y)` // TODO
+//! - Working with all fns at once (no `_mut` and `_once` versions of functions)
+//! - Flipping big functions (e.g.: `(A, B, C) -> D` to `(C, B, A) -> D`) // TODO
+//! - Destructing functions into inner functions (e.g.: [`Chain::into_inner`])
+//! - Extensions on `Fn*` traits (e.g.: [`.chain`])
+//!
+//! Using [`unboxed_closures`] and [`fn_traits`] features ([tracking issue])
+//!
+//! ## See also
+//! - [Wiki: Function Composition]
+//! - [rossetacode.org: Function Composition]
+//! - [stackoverflow: How to compose functions in Rust?]
+//!
+//! [telegram]: https://vee.gg/t/WaffleLapkin
+//! [github]: https://github.com/WaffleLapkin/fntools
+//!
+//! [`unstable`]: crate::unstable
+//!
+//! [`Chain::into_inner`]: crate::unstable::chain::Chain::into_inner
+//! [`.chain`]: crate::unstable::ext::FnExt::chain
+//!
+//! [`fn_traits`]: https://doc.rust-lang.org/unstable-book/library-features/fn-traits.html
+//! [`unboxed_closures`]: https://doc.rust-lang.org/unstable-book/language-features/unboxed-closures.html
+//! [tracking issue]: https://github.com/rust-lang/rust/issues/29625
+//!
+//! [Wiki: Function Composition]: https://en.wikipedia.org/wiki/Function_composition
+//! [rossetacode.org: Function Composition]: https://rosettacode.org/wiki/Function_composition#Rust
+//! [stackoverflow: How to compose functions in Rust?]: https://stackoverflow.com/questions/45786955/how-to-compose-functions-in-rust
 #![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
 
 #[macro_use]

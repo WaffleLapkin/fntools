@@ -95,8 +95,7 @@ pub trait FnExtSupply<T, A>: Sized {
     ///
     /// # Examples:
     /// ```
-    /// // or `::unstable::fn_extensions::*`
-    /// use fntools::unstable::chain::FnExtChain;
+    /// use fntools::unstable::ext::FnExt;
     ///
     /// let add_two = |a: i32| a + 2;
     /// let add_three = |a: i32| a + 3;
