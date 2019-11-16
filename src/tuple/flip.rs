@@ -5,15 +5,23 @@ use crate::sealed::Sealed;
 /// Flips tuple, so first element becomes last, last becomes first, 2-nd becomes
 /// 2-nd from the end and so on.
 ///
-/// ## Example
+/// ## Examples
 /// ```
 /// use fntools::tuple::flip::FlipTuple;
 ///
 /// assert_eq!((1, "hello").flip(), ("hello", 1));
 /// assert_eq!((true, 42, ()).flip(), ((), 42, true));
 /// ```
-pub trait FlipTuple: Sealed {
-    type Res;
+///
+/// ```
+/// use fntools::tuple::flip::FlipTuple;
+///
+/// let tuple = (17, (), false, "OwO");
+/// assert_eq!(tuple.flip().flip(), tuple);
+/// ```
+pub trait FlipTuple: Sized + Sealed {
+    /// Result of flipping the tuple
+    type Res: FlipTuple<Res = Self>;
 
     fn flip(self) -> Self::Res;
 }
