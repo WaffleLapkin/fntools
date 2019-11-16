@@ -1,8 +1,9 @@
 use crate::{
-    tuple::take::TupleTake,
+    tuple::{flip::FlipTuple, take::TupleTake},
     unstable::{
         chain::{chain, Chain},
         compose::{compose, Compose},
+        flip::{flip, Flip},
         supply::{supply, Supply},
         untuple::{untuple, Untuple},
     },
@@ -16,11 +17,13 @@ use crate::{
 /// - [`compose`]
 /// - [`compose`] + [`untuple`]
 /// - [`supply`]
+/// - [`flip`]
 ///
 /// [`chain`]: crate::unstable::chain::chain
 /// [`untuple`]: crate::unstable::untuple::untuple
 /// [`compose`]: crate::unstable::compose::compose
 /// [`supply`]: crate::unstable::supply::supply
+/// [`flip`]: crate::unstable::flip::flip
 pub trait FnExt<Args>: Sized {
     /// Chain two functions (`g ∘ self`)
     ///
@@ -155,6 +158,14 @@ pub trait FnExt<Args>: Sized {
         Args: TupleTake,
     {
         supply(argument, self)
+    }
+
+    fn flip(self) -> Flip<Self>
+    where
+        Self: FnOnce<Args>,
+        Args: FlipTuple,
+    {
+        flip(self)
     }
 }
 

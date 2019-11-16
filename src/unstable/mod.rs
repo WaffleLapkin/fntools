@@ -5,5 +5,6 @@ pub mod prelude {
 pub mod chain;
 pub mod compose;
 pub mod ext;
+pub mod flip;
 pub mod supply;
 pub mod untuple;
