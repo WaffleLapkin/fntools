@@ -149,10 +149,10 @@ pub trait FnExt<Args>: Sized {
     ///
     /// assert_eq!(fun(), "a: 8, b: 16, c: \"AAA\"")
     /// ```
-    fn supply<T>(self, argument: T) -> Supply<T, Self, Args>
+    fn supply(self, argument: Args::Take) -> Supply<Args::Take, Self, Args>
     where
         Self: FnOnce<Args>,
-        Args: TupleTake<Take = T>,
+        Args: TupleTake,
     {
         supply(argument, self)
     }

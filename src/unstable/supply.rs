@@ -27,10 +27,10 @@ use crate::tuple::{append::TupleAppend, take::TupleTake};
 ///
 /// assert_eq!(fun(), "a: 8, b: 16, c: \"AAA\"")
 /// ```
-pub fn supply<T, F, A>(argument: T, f: F) -> Supply<T, F, A>
+pub fn supply<F, A>(argument: A::Take, f: F) -> Supply<A::Take, F, A>
 where
     F: FnOnce<A>,
-    A: TupleTake<Take = T>,
+    A: TupleTake,
 {
     Supply::new(argument, f)
 }
@@ -47,6 +47,7 @@ impl<T, F, A> Supply<T, F, A> {
     where
         F: FnOnce<A>,
         A: TupleTake<Take = T>,
+        A::Rem: TupleAppend<T, Res = A>,
     {
         Supply(argument, f, PhantomData)
     }
@@ -86,39 +87,6 @@ where
     extern "rust-call" fn call(&self, args: E) -> Self::Output {
         let Supply(data, f, _) = self;
         f.call(args.append(data.clone()))
-    }
-}
-
-/// `.supply` extension for Fn* types
-pub trait FnExtSupply<T, A>: Sized {
-    /// Chain two functions (`g ∘ self`)
-    ///
-    /// # Examples:
-    /// ```
-    /// use fntools::unstable::ext::FnExt;
-    ///
-    /// let add_two = |a: i32| a + 2;
-    /// let add_three = |a: i32| a + 3;
-    /// let add_eight = add_two
-    ///     .chain(add_three)
-    ///     .chain(add_three);
-    ///
-    /// assert_eq!(add_eight(4), 12);
-    /// ```
-    ///
-    /// For more info see [`chain`]
-    ///
-    /// [`chain`]: crate::unstable::chain::chain
-    fn supply(self, argument: T) -> Supply<T, Self, A>;
-}
-
-impl<T, F, A> FnExtSupply<T, A> for F
-where
-    F: FnOnce<A>,
-    A: TupleTake<Take = T>,
-{
-    fn supply(self, argument: T) -> Supply<T, Self, A> {
-        Supply::new(argument, self)
     }
 }
 

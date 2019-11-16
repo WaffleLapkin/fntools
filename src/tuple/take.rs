@@ -1,4 +1,5 @@
 use crate::sealed::Sealed;
+use crate::tuple::append::TupleAppend;
 
 /// Takes element from the **start** of the tuple, producing new tuple.
 ///
@@ -19,9 +20,9 @@ use crate::sealed::Sealed;
 /// // so this code won't be compiled
 /// assert_eq!(().take(), ());
 /// ```
-pub trait TupleTake: Sealed {
+pub trait TupleTake: Sized + Sealed {
     /// Remaining part of the tuple, after taking an element
-    type Rem;
+    type Rem: TupleAppend<Self::Take, Res = Self>;
 
     /// Taken element
     type Take;
