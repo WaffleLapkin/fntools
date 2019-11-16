@@ -3,6 +3,7 @@ use crate::{
     unstable::{
         chain::{chain, Chain},
         compose::{compose, Compose},
+        curry::{curry, Curry},
         flip::{flip, Flip},
         supply::{supply, Supply},
         untuple::{untuple, Untuple},
@@ -18,12 +19,14 @@ use crate::{
 /// - [`compose`] + [`untuple`]
 /// - [`supply`]
 /// - [`flip`]
+/// - [`curry`]
 ///
 /// [`chain`]: crate::unstable::chain::chain
 /// [`untuple`]: crate::unstable::untuple::untuple
 /// [`compose`]: crate::unstable::compose::compose
 /// [`supply`]: crate::unstable::supply::supply
 /// [`flip`]: crate::unstable::flip::flip
+/// [`curry`]: crate::unstable::curry::curry
 pub trait FnExt<Args>: Sized {
     /// Chain two functions (`g ∘ self`)
     ///
@@ -166,6 +169,25 @@ pub trait FnExt<Args>: Sized {
         Args: FlipTuple,
     {
         flip(self)
+    }
+
+    /// **Extremely bad** curring.
+    ///
+    /// ## Examples
+    /// ```
+    /// use std::ops::Add;
+    /// use fntools::unstable::ext::FnExt;
+    ///
+    /// let fun = i32::add.curry();
+    /// let res = fun(2)(2)();
+    /// //                 ^^ ---- yep, you need this, sorry :(
+    /// assert_eq!(res, 4);
+    /// ```
+    fn curry(self) -> Curry<(), Self, Args, Args>
+    where
+        Self: FnOnce<Args>,
+    {
+        curry(self)
     }
 }
 

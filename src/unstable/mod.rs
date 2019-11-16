@@ -4,6 +4,7 @@ pub mod prelude {
 
 pub mod chain;
 pub mod compose;
+pub mod curry;
 pub mod ext;
 pub mod flip;
 pub mod supply;
