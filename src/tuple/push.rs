@@ -1,4 +1,5 @@
 use crate::sealed::Sealed;
+use crate::tuple::pop::TuplePop;
 
 /// Push element to the **end** of the tuple, producing new tuple.
 ///
@@ -10,9 +11,9 @@ use crate::sealed::Sealed;
 /// assert_eq!((999,).push("str"), (999, "str"));
 /// assert_eq!((47, "str", 14usize).push(true), (47, "str", 14usize, true));
 /// ```
-pub trait TuplePush<T>: Sealed {
+pub trait TuplePush<T>: Sized + Sealed {
     /// Result of pushing element `E` to tuple `Self`
-    type Res;
+    type Res: TuplePop<Rem = Self, Pop = T>;
 
     fn push(self, element: T) -> Self::Res;
 }

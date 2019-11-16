@@ -1,4 +1,5 @@
 use crate::sealed::Sealed;
+use crate::tuple::push::TuplePush;
 
 /// Popes element from the **end** of the tuple, producing new tuple.
 ///
@@ -19,9 +20,9 @@ use crate::sealed::Sealed;
 /// // so this code won't be compiled
 /// assert_eq!(().pop(), ());
 /// ```
-pub trait TuplePop: Sealed {
+pub trait TuplePop: Sized + Sealed {
     /// Remaining part of the tuple, after popping an element
-    type Rem;
+    type Rem: TuplePush<Self::Pop, Res = Self>;
 
     /// Poped element
     type Pop;
