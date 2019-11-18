@@ -91,8 +91,6 @@ pub mod value;
 pub mod tuple {
     /// Append element to tuple (`T + (A, B) => (T, A, B)`)
     pub mod append;
-    /// Convert everything to tuples (`A => (A,)`; `(A, B) => (A, B)`)
-    pub mod auto_tuple;
     /// Flip tuple (`(A, B) => (B, A)`)
     pub mod flip;
     /// Pop element from tuple (`(A, B, T) => ((A, B), T)`)
