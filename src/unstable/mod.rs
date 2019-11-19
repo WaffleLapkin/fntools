@@ -1,5 +1,14 @@
 pub mod prelude {
-    pub use super::{chain::chain, compose::compose, ext::FnExt, supply::supply, untuple::untuple};
+    pub use super::{
+        chain::chain,
+        compose::compose,
+        curry::curry,
+        ext::FnExt,
+        flip::flip,
+        supply::supply,
+        untuple::untuple,
+        value::ValueExtUnstable,
+    };
 }
 
 pub mod chain;

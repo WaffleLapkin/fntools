@@ -35,6 +35,7 @@ impl<T> TupleTake for (T,) {
 
     type Take = T;
 
+    #[inline]
     fn take(self) -> (Self::Take, Self::Rem) {
         (self.0, ())
     }
@@ -46,6 +47,7 @@ macro_rules! tuple_impl {
             type Rem = ($( $types, )*);
             type Take = T;
 
+            #[inline]
             fn take(self) -> (Self::Take, Self::Rem) {
                 (self.0, ($( self.$e, )*))
             }

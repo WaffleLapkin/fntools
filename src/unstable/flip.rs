@@ -27,6 +27,7 @@ impl<F> Flip<F> {
     /// let fun = Flip::new(<[_]>::split_at);
     /// assert_eq!(fun(2, &[0, 1, 2, 3, 4]), (&[0, 1][..], &[2, 3, 4][..]))
     /// ```
+    #[inline]
     pub fn new<A>(f: F) -> Self
     where
         F: FnOnce<A>,
@@ -35,11 +36,13 @@ impl<F> Flip<F> {
         Flip(f)
     }
 
+    #[inline]
     pub fn into_inner(self) -> F {
         let Flip(f) = self;
         f
     }
 
+    #[inline]
     pub fn as_inner(&self) -> &F {
         let Flip(f) = self;
         f
@@ -53,6 +56,7 @@ where
 {
     type Output = F::Output;
 
+    #[inline]
     extern "rust-call" fn call_once(self, args: A) -> Self::Output {
         let Flip(f) = self;
         let res: F::Output = f.call_once(args.flip());
@@ -65,6 +69,7 @@ where
     F: FnMut<A::Res>,
     A: FlipTuple,
 {
+    #[inline]
     extern "rust-call" fn call_mut(&mut self, args: A) -> Self::Output {
         let Flip(f) = self;
         let res: F::Output = f.call_mut(args.flip());
@@ -77,6 +82,7 @@ where
     F: Fn<A::Res>,
     A: FlipTuple,
 {
+    #[inline]
     extern "rust-call" fn call(&self, args: A) -> Self::Output {
         let Flip(f) = self;
         let res: F::Output = f.call(args.flip());

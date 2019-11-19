@@ -13,6 +13,7 @@ pub trait ValueExt {
     ///
     /// assert_eq!(val, 25)
     /// ```
+    #[inline]
     fn apply<F, R>(self, f: F) -> R
     where
         Self: Sized,
@@ -39,6 +40,7 @@ pub trait ValueExt {
     /// assert_eq!(val, 4);
     /// ```
     /// [^1]: actually no, cause `dbg!` also prints file/line
+    #[inline]
     fn also<F>(self, f: F) -> Self
     where
         Self: Sized,

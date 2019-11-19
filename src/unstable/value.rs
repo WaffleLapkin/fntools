@@ -13,6 +13,7 @@ pub trait ValueExtUnstable {
     ///
     /// assert_eq!(val, 12)
     /// ```
+    #[inline]
     fn apply_ut<F>(self, f: F) -> F::Output
     where
         Self: Sized,

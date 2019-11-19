@@ -21,6 +21,7 @@ pub trait TuplePush<T>: Sized + Sealed {
 impl<T> TuplePush<T> for () {
     type Res = (T,);
 
+    #[inline]
     fn push(self, element: T) -> Self::Res {
         (element,)
     }
@@ -31,6 +32,7 @@ macro_rules! tuple_impl {
         impl<$( $types, )* T> TuplePush<T> for ($( $types, )*) {
             type Res = ($( $types, )* T);
 
+            #[inline]
             fn push(self, element: T) -> Self::Res {
                 ($( self.$e, )* element)
             }

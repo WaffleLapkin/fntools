@@ -21,6 +21,7 @@ pub trait TupleAppend<E>: Sized + Sealed {
 impl<T> TupleAppend<T> for () {
     type Res = (T,);
 
+    #[inline]
     fn append(self, element: T) -> (T,) {
         (element,)
     }
@@ -31,6 +32,7 @@ macro_rules! tuple_impl {
         impl<T, $( $types, )*> TupleAppend<T> for ($( $types, )*) {
             type Res = (T, $( $types, )*);
 
+            #[inline]
             fn append(self, element: T) -> Self::Res {
                 (element, $( self.$e, )*)
             }

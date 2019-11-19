@@ -1,3 +1,4 @@
+#[inline]
 pub fn untuple<A, F>(f: F) -> Untuple<F>
 where
     F: FnOnce<A>,
@@ -10,6 +11,7 @@ where
 pub struct Untuple<F>(F);
 
 impl<F> Untuple<F> {
+    #[inline]
     pub fn new<A>(f: F) -> Self
     where
         F: FnOnce<A>,
@@ -17,11 +19,13 @@ impl<F> Untuple<F> {
         Untuple(f)
     }
 
+    #[inline]
     pub fn into_inner(self) -> F {
         let Untuple(f) = self;
         f
     }
 
+    #[inline]
     pub fn as_inner(&self) -> &F {
         let Untuple(f) = self;
         f
@@ -34,6 +38,7 @@ where
 {
     type Output = F::Output;
 
+    #[inline]
     extern "rust-call" fn call_once(self, (args,): (A,)) -> Self::Output {
         let Untuple(f) = self;
         let res: F::Output = f.call_once(args);
@@ -45,6 +50,7 @@ impl<A, F> FnMut<(A,)> for Untuple<F>
 where
     F: FnMut<A>,
 {
+    #[inline]
     extern "rust-call" fn call_mut(&mut self, (args,): (A,)) -> Self::Output {
         let Untuple(f) = self;
         let res: F::Output = f.call_mut(args);
@@ -56,6 +62,7 @@ impl<A, F> Fn<(A,)> for Untuple<F>
 where
     F: Fn<A>,
 {
+    #[inline]
     extern "rust-call" fn call(&self, (args,): (A,)) -> Self::Output {
         let Untuple(f) = self;
         let res: F::Output = f.call(args);

@@ -24,6 +24,7 @@
 /// [`FnExt::compose`]: crate::unstable::ext::FnExt::compose
 /// [`compose`]: super::compose::compose
 /// [`fntools::compose`]: crate::compose
+#[inline]
 pub fn compose<A, F, G>(f: F, g: G) -> Compose<F, G>
 where
     F: FnOnce<(G::Output,)>,
@@ -39,24 +40,30 @@ where
 /// [`compose`]: self::compose
 #[must_use = "function combinators are lazy and do nothing unless called"]
 #[derive(Debug, Clone, Copy)]
-pub struct Compose<F, G>(F, G);
+pub struct Compose<F, G> {
+    f: F,
+    g: G,
+}
 
 impl<F, G> Compose<F, G> {
+    #[inline]
     pub fn new<A>(f: F, g: G) -> Self
     where
         F: FnOnce<(G::Output,)>,
         G: FnOnce<A>,
     {
-        Compose(f, g)
+        Compose { f, g }
     }
 
+    #[inline]
     pub fn into_inner(self) -> (F, G) {
-        let Compose(f, g) = self;
+        let Compose { f, g } = self;
         (f, g)
     }
 
+    #[inline]
     pub fn as_inner(&self) -> (&F, &G) {
-        let Compose(f, g) = self;
+        let Compose { f, g } = self;
         (f, g)
     }
 }
@@ -68,8 +75,9 @@ where
 {
     type Output = F::Output;
 
+    #[inline]
     extern "rust-call" fn call_once(self, args: A) -> Self::Output {
-        let Compose(f, g) = self;
+        let Compose { f, g } = self;
         let b: G::Output = g.call_once(args);
         let c: F::Output = f(b);
         c
@@ -81,8 +89,9 @@ where
     F: FnMut<(G::Output,)>,
     G: FnMut<A>,
 {
+    #[inline]
     extern "rust-call" fn call_mut(&mut self, args: A) -> Self::Output {
-        let Compose(f, g) = self;
+        let Compose { f, g } = self;
         let b: G::Output = g.call_mut(args);
         let c: F::Output = f(b);
         c
@@ -94,8 +103,9 @@ where
     F: Fn<(G::Output,)>,
     G: Fn<A>,
 {
+    #[inline]
     extern "rust-call" fn call(&self, args: A) -> Self::Output {
-        let Compose(f, g) = self;
+        let Compose { f, g } = self;
         let b: G::Output = g.call(args);
         let c: F::Output = f(b);
         c

@@ -46,6 +46,7 @@ pub trait FnExt<Args>: Sized {
     /// For more info see [`chain`]
     ///
     /// [`chain`]: crate::unstable::chain::chain
+    #[inline]
     fn chain<G>(self, g: G) -> Chain<Self, G>
     where
         Self: FnOnce<Args>,
@@ -66,6 +67,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// assert_eq!(add_eight(4), 12);
     /// ```
+    #[inline]
     fn chain_ut<G>(self, g: G) -> Chain<Self, Untuple<G>>
     where
         Self: FnOnce<Args>,
@@ -94,6 +96,7 @@ pub trait FnExt<Args>: Sized {
     /// For more info see [`compose`]
     ///
     /// [`compose`]: crate::unstable::compose::compose
+    #[inline]
     fn compose<A, G>(self, g: G) -> Compose<Self, G>
     where
         Self: FnOnce<(G::Output,)>,
@@ -132,6 +135,7 @@ pub trait FnExt<Args>: Sized {
     /// For more info see [`compose`]
     ///
     /// [`compose`]: crate::unstable::compose::compose
+    #[inline]
     fn compose_ut<A, G>(self, g: G) -> Compose<Untuple<Self>, G>
     where
         Self: FnOnce<Args>,
@@ -155,6 +159,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// assert_eq!(fun(), "a: 8, b: 16, c: \"AAA\"")
     /// ```
+    #[inline]
     fn supply(self, argument: Args::Take) -> Supply<Args::Take, Self, Args>
     where
         Self: FnOnce<Args>,
@@ -163,6 +168,7 @@ pub trait FnExt<Args>: Sized {
         supply(argument, self)
     }
 
+    #[inline]
     fn flip(self) -> Flip<Self>
     where
         Self: FnOnce<Args>,
@@ -183,6 +189,7 @@ pub trait FnExt<Args>: Sized {
     /// //                 ^^ ---- yep, you need this, sorry :(
     /// assert_eq!(res, 4);
     /// ```
+    #[inline]
     fn curry(self) -> Curry<(), Self, Args, Args>
     where
         Self: FnOnce<Args>,

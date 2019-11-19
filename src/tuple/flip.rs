@@ -61,12 +61,14 @@ mod tests {
 impl FlipTuple for () {
     type Res = ();
 
+    #[inline]
     fn flip(self) -> Self::Res {}
 }
 
 impl<A> FlipTuple for (A,) {
     type Res = (A,);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.0,)
     }
@@ -75,6 +77,7 @@ impl<A> FlipTuple for (A,) {
 impl<A, B> FlipTuple for (A, B) {
     type Res = (B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.1, self.0)
     }
@@ -83,6 +86,7 @@ impl<A, B> FlipTuple for (A, B) {
 impl<A, B, C> FlipTuple for (A, B, C) {
     type Res = (C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.2, self.1, self.0)
     }
@@ -91,6 +95,7 @@ impl<A, B, C> FlipTuple for (A, B, C) {
 impl<A, B, C, D> FlipTuple for (A, B, C, D) {
     type Res = (D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.3, self.2, self.1, self.0)
     }
@@ -99,6 +104,7 @@ impl<A, B, C, D> FlipTuple for (A, B, C, D) {
 impl<A, B, C, D, E> FlipTuple for (A, B, C, D, E) {
     type Res = (E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.4, self.3, self.2, self.1, self.0)
     }
@@ -107,6 +113,7 @@ impl<A, B, C, D, E> FlipTuple for (A, B, C, D, E) {
 impl<A, B, C, D, E, F> FlipTuple for (A, B, C, D, E, F) {
     type Res = (F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.5, self.4, self.3, self.2, self.1, self.0)
     }
@@ -115,6 +122,7 @@ impl<A, B, C, D, E, F> FlipTuple for (A, B, C, D, E, F) {
 impl<A, B, C, D, E, F, G> FlipTuple for (A, B, C, D, E, F, G) {
     type Res = (G, F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (self.6, self.5, self.4, self.3, self.2, self.1, self.0)
     }
@@ -123,6 +131,7 @@ impl<A, B, C, D, E, F, G> FlipTuple for (A, B, C, D, E, F, G) {
 impl<A, B, C, D, E, F, G, H> FlipTuple for (A, B, C, D, E, F, G, H) {
     type Res = (H, G, F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (
             self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
@@ -133,6 +142,7 @@ impl<A, B, C, D, E, F, G, H> FlipTuple for (A, B, C, D, E, F, G, H) {
 impl<A, B, C, D, E, F, G, H, I> FlipTuple for (A, B, C, D, E, F, G, H, I) {
     type Res = (I, H, G, F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (
             self.8, self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
@@ -143,6 +153,7 @@ impl<A, B, C, D, E, F, G, H, I> FlipTuple for (A, B, C, D, E, F, G, H, I) {
 impl<A, B, C, D, E, F, G, H, I, J> FlipTuple for (A, B, C, D, E, F, G, H, I, J) {
     type Res = (J, I, H, G, F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (
             self.9, self.8, self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
@@ -153,6 +164,7 @@ impl<A, B, C, D, E, F, G, H, I, J> FlipTuple for (A, B, C, D, E, F, G, H, I, J) 
 impl<A, B, C, D, E, F, G, H, I, J, K> FlipTuple for (A, B, C, D, E, F, G, H, I, J, K) {
     type Res = (K, J, I, H, G, F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (
             self.10, self.9, self.8, self.7, self.6, self.5, self.4, self.3, self.2, self.1, self.0,
@@ -163,6 +175,7 @@ impl<A, B, C, D, E, F, G, H, I, J, K> FlipTuple for (A, B, C, D, E, F, G, H, I, 
 impl<A, B, C, D, E, F, G, H, I, J, K, L> FlipTuple for (A, B, C, D, E, F, G, H, I, J, K, L) {
     type Res = (L, K, J, I, H, G, F, E, D, C, B, A);
 
+    #[inline]
     fn flip(self) -> Self::Res {
         (
             self.11, self.10, self.9, self.8, self.7, self.6, self.5, self.4, self.3, self.2,

@@ -14,6 +14,7 @@ use std::marker::PhantomData;
 /// //                 ^^ ---- yep, you need this :(
 /// assert_eq!(res, 4);
 /// ```
+#[inline]
 pub fn curry<A, F>(f: F) -> Curry<(), F, A, A>
 where
     F: FnOnce<A>,
@@ -21,14 +22,33 @@ where
     Curry::new(f)
 }
 
-pub struct Curry<T, F, Args, RemArgs>(T, F, PhantomData<dyn Fn(Args, RemArgs)>);
+pub struct Curry<T, F, Args, RemArgs> {
+    supplied: T,
+    f: F,
+    marker: PhantomData<dyn Fn(Args, RemArgs)>,
+}
 
 impl<F, A> Curry<(), F, A, A> {
+    #[inline]
     pub fn new(f: F) -> Self
     where
         F: FnOnce<A>,
     {
-        Curry((), f, PhantomData)
+        Curry { supplied: (), f, marker: PhantomData }
+    }
+}
+
+impl<T, F, A, RA> Curry<T, F, A, RA> {
+    #[inline]
+    pub fn into_inner(self) -> (T, F) {
+        let Curry { supplied, f, .. } = self;
+        (supplied, f)
+    }
+
+    #[inline]
+    pub fn as_inner(&self) -> (&T, &F) {
+        let Curry { supplied, f, .. } = self;
+        (supplied, f)
     }
 }
 
@@ -40,9 +60,10 @@ where
 {
     type Output = Curry<D::Res, F, FArgs, Rem::Rem>;
 
+    #[inline]
     extern "rust-call" fn call_once(self, (arg,): (Rem::Take,)) -> Self::Output {
-        let Curry(data, f, _) = self;
-        Curry(data.push(arg), f, PhantomData)
+        let Curry { supplied, f, .. } = self;
+        Curry { supplied: supplied.push(arg), f, marker: PhantomData }
     }
 }
 
@@ -52,9 +73,10 @@ where
 {
     type Output = F::Output;
 
+    #[inline]
     extern "rust-call" fn call_once(self, _: ()) -> Self::Output {
-        let Curry(data, f, _) = self;
-        f.call_once(data)
+        let Curry { supplied, f, .. } = self;
+        f.call_once(supplied)
     }
 }
 
@@ -63,9 +85,10 @@ where
     F: FnMut<FArgs>,
     FArgs: Clone,
 {
+    #[inline]
     extern "rust-call" fn call_mut(&mut self, _: ()) -> Self::Output {
-        let Curry(data, f, _) = self;
-        f.call_mut(data.clone())
+        let Curry { supplied, f, .. } = self;
+        f.call_mut(supplied.clone())
     }
 }
 
@@ -74,9 +97,10 @@ where
     F: Fn<FArgs>,
     FArgs: Clone,
 {
+    #[inline]
     extern "rust-call" fn call(&self, _: ()) -> Self::Output {
-        let Curry(data, f, _) = self;
-        f.call(data.clone())
+        let Curry { supplied, f, .. } = self;
+        f.call(supplied.clone())
     }
 }
 

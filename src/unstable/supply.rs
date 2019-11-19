@@ -27,6 +27,7 @@ use crate::tuple::{append::TupleAppend, take::TupleTake};
 ///
 /// assert_eq!(fun(), "a: 8, b: 16, c: \"AAA\"")
 /// ```
+#[inline]
 pub fn supply<F, A>(argument: A::Take, f: F) -> Supply<A::Take, F, A>
 where
     F: FnOnce<A>,
@@ -39,17 +40,23 @@ where
 ///
 /// See [supply](self::supply) for documentation
 #[must_use = "function combinators are lazy and do nothing unless called"]
-pub struct Supply<T, F, A>(T, F, PhantomData<A>);
+pub struct Supply<T, F, A> {
+    /// Supplied argument
+    argument: T,
+    f: F,
+    marker: PhantomData<dyn Fn(A)>,
+}
 
 // TODO: for some reasons when param `A` moved to `new` (new<A>) type inference brakes
 impl<T, F, A> Supply<T, F, A> {
+    #[inline]
     pub fn new(argument: T, f: F) -> Self
     where
         F: FnOnce<A>,
         A: TupleTake<Take = T>,
         A::Rem: TupleAppend<T, Res = A>,
     {
-        Supply(argument, f, PhantomData)
+        Supply { argument, f, marker: PhantomData }
     }
 }
 
@@ -60,9 +67,10 @@ where
 {
     type Output = F::Output;
 
+    #[inline]
     extern "rust-call" fn call_once(self, args: E) -> Self::Output {
-        let Supply(data, f, _) = self;
-        f.call_once(args.append(data))
+        let Supply { argument, f, .. } = self;
+        f.call_once(args.append(argument))
     }
 }
 
@@ -72,9 +80,10 @@ where
     E: TupleAppend<T>,
     T: Clone,
 {
+    #[inline]
     extern "rust-call" fn call_mut(&mut self, args: E) -> Self::Output {
-        let Supply(data, f, _) = self;
-        f.call_mut(args.append(data.clone()))
+        let Supply { argument, f, .. } = self;
+        f.call_mut(args.append(argument.clone()))
     }
 }
 
@@ -84,9 +93,10 @@ where
     E: TupleAppend<T>,
     T: Clone,
 {
+    #[inline]
     extern "rust-call" fn call(&self, args: E) -> Self::Output {
-        let Supply(data, f, _) = self;
-        f.call(args.append(data.clone()))
+        let Supply { argument, f, .. } = self;
+        f.call(args.append(argument.clone()))
     }
 }
 
@@ -97,8 +107,8 @@ where
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         f.debug_struct("Supply")
-            .field("arg", &self.0)
-            .field("f", &self.1)
+            .field("argument", &self.argument)
+            .field("f", &self.f)
             .finish()
     }
 }
@@ -108,8 +118,13 @@ where
     T: Clone,
     F: Clone,
 {
+    #[inline]
     fn clone(&self) -> Self {
-        Supply(self.0.clone(), self.1.clone(), PhantomData)
+        Supply {
+            argument: self.argument.clone(),
+            f: self.f.clone(),
+            marker: PhantomData
+        }
     }
 }
 

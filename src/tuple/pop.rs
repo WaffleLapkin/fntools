@@ -34,6 +34,7 @@ impl<T> TuplePop for (T,) {
     type Rem = ();
     type Pop = T;
 
+    #[inline]
     fn pop(self) -> (Self::Rem, Self::Pop) {
         ((), self.0)
     }
@@ -45,6 +46,7 @@ macro_rules! tuple_impl {
             type Rem = ($( $types, )* $last_ty,);
             type Pop = T;
 
+            #[inline]
             fn pop(self) -> (Self::Rem, Self::Pop) {
                 ((self.0, $( self.$e ),*), self.$last_e)
             }

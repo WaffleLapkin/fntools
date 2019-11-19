@@ -142,6 +142,7 @@ mod macro_def;
 ///
 /// [`unstable::compose`]: crate::unstable::compose::compose
 /// [`fntools::chain`]: crate::chain
+#[inline]
 pub fn compose<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C
 where
     G: Fn(A) -> B,
@@ -153,6 +154,7 @@ where
 /// Compose two functions which can be called only once.
 ///
 /// See [compose](self::compose) for documentation.
+#[inline]
 pub fn compose_once<A, B, C, F, G>(f: F, g: G) -> impl FnOnce(A) -> C
 where
     G: FnOnce(A) -> B,
@@ -164,6 +166,7 @@ where
 /// Compose two functions which can be called only by unique reference.
 ///
 /// See [compose](self::compose) for documentation.
+#[inline]
 pub fn compose_mut<A, B, C, F, G>(mut f: F, mut g: G) -> impl FnMut(A) -> C
 where
     G: FnMut(A) -> B,
@@ -207,6 +210,7 @@ where
 ///
 /// [`unstable::chain`]: crate::unstable::chain::chain
 /// [`fntools::compose`]: crate::compose
+#[inline]
 pub fn chain<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C
 where
     F: Fn(A) -> B,
@@ -218,6 +222,7 @@ where
 /// Chain two functions which can be called only once.
 ///
 /// See [chain](self::chain) for documentation.
+#[inline]
 pub fn chain_once<A, B, C, F, G>(f: F, g: G) -> impl FnOnce(A) -> C
 where
     F: FnOnce(A) -> B,
@@ -229,6 +234,7 @@ where
 /// Chain two functions which can be called only by unique reference.
 ///
 /// See [chain](self::chain) for documentation.
+#[inline]
 pub fn chain_mut<A, B, C, F, G>(mut f: F, mut g: G) -> impl FnMut(A) -> C
 where
     F: FnMut(A) -> B,
@@ -251,6 +257,7 @@ where
 /// assert_eq!(slice, 12);
 /// assert_eq!(str, 12);
 /// ```
+#[inline]
 pub fn product<A, B, X, Y, F, G>(f: F, g: G) -> impl Fn(A, X) -> (B, Y)
 where
     F: Fn(A) -> B,
@@ -262,6 +269,7 @@ where
 /// Cartesian product of functions which can be called only once.
 ///
 /// See [product](self::product) for documentation.
+#[inline]
 pub fn product_once<A, B, X, Y, F, G>(f: F, g: G) -> impl FnOnce(A, X) -> (B, Y)
 where
     F: FnOnce(A) -> B,
@@ -273,6 +281,7 @@ where
 /// Cartesian product of functions which can be called only by unique reference.
 ///
 /// See [product](self::product) for documentation.
+#[inline]
 pub fn product_mut<A, B, X, Y, F, G>(mut f: F, mut g: G) -> impl FnMut(A, X) -> (B, Y)
 where
     F: FnMut(A) -> B,
