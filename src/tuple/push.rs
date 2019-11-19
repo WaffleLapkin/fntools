@@ -28,16 +28,18 @@ impl<T> TuplePush<T> for () {
 }
 
 macro_rules! tuple_impl {
-    ($( $types:ident [$e:tt], )*) => {
+    ($( $types:ident, )*) => {
         impl<$( $types, )* T> TuplePush<T> for ($( $types, )*) {
             type Res = ($( $types, )* T);
 
             #[inline]
+            #[allow(non_snake_case)]
             fn push(self, element: T) -> Self::Res {
-                ($( self.$e, )* element)
+                let ($( $types, )*) = self;
+                ($( $types, )* element)
             }
         }
     };
 }
 
-for_tuples_tt!(A [0], B [1], C [2], D [3], E [4], F [5], G [6], H[7], I[8], J[9], K[10], # tuple_impl);
+for_tuples!(A, B, C, D, E, F, G, H, I, J, K, # tuple_impl);

@@ -99,6 +99,9 @@ pub mod tuple {
     pub mod push;
     /// Take element from tuple (`(T, A, B) => (T, (A, B))`)
     pub mod take;
+    /// Provide traits for conversion `&(A, B) => (&A, &B)` and
+    /// `&mut (A, B) => (&mut A, &mut B)`
+    pub mod as_ref;
 }
 
 pub mod prelude {
@@ -294,10 +297,15 @@ mod sealed {
     pub trait Sealed {}
 
     impl Sealed for () {}
+    impl<S: Sealed> Sealed for &'_ S {}
+    impl<S: Sealed> Sealed for &'_ mut S {}
 
     macro_rules! tuple_impl {
         ($( $types:ident, )*) => {
-            impl<$( $types, )*> Sealed for ($( $types, )*) {}
+            impl<$( $types, )*> Sealed for ($( $types, )*)
+            where
+                last_type!($( $types, )*): ?Sized,
+            {}
         };
     }
 

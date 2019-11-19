@@ -41,17 +41,19 @@ impl<T> TuplePop for (T,) {
 }
 
 macro_rules! tuple_impl {
-    ($( $types:ident [$e:tt], )* @ $last_ty:ident [$last_e:tt],) => {
-        impl<T, $( $types, )* $last_ty> TuplePop for ($( $types, )* $last_ty, T) {
-            type Rem = ($( $types, )* $last_ty,);
+    ($( $types:ident, )*) => {
+        impl<T, $( $types, )*> TuplePop for ($( $types, )* T) {
+            type Rem = ($( $types, )*);
             type Pop = T;
 
             #[inline]
+            #[allow(non_snake_case)]
             fn pop(self) -> (Self::Rem, Self::Pop) {
-                ((self.0, $( self.$e ),*), self.$last_e)
+                let ($( $types, )* pop) = self;
+                (($( $types, )*), pop)
             }
         }
     };
 }
 
-for_tuples_tt_last!(A [1], B [2], C [3], D [4], E [5], F [6], G [7], H [8], I [9], J [10], K [11], # tuple_impl);
+for_tuples!(A, B, C, D, E, F, G, H, I, J, K, # tuple_impl);

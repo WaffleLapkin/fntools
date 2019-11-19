@@ -42,17 +42,19 @@ impl<T> TupleTake for (T,) {
 }
 
 macro_rules! tuple_impl {
-    ($( $types:ident [$e:tt], )*) => {
+    ($( $types:ident, )*) => {
         impl<T, $( $types, )*> TupleTake for (T, $( $types, )*) {
             type Rem = ($( $types, )*);
             type Take = T;
 
             #[inline]
+            #[allow(non_snake_case)]
             fn take(self) -> (Self::Take, Self::Rem) {
-                (self.0, ($( self.$e, )*))
+                let (take, $( $types, )*) = self;
+                (take, ($( $types, )*))
             }
         }
     };
 }
 
-for_tuples_tt!(A [1], B [2], C [3], D [4], E [5], F [6], G [7], H [8], I [9], J [10], K [11], # tuple_impl);
+for_tuples!(A, B, C, D, E, F, G, H, I, J, K, # tuple_impl);
