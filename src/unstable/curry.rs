@@ -34,7 +34,11 @@ impl<F, A> Curry<(), F, A, A> {
     where
         F: FnOnce<A>,
     {
-        Curry { supplied: (), f, marker: PhantomData }
+        Curry {
+            supplied: (),
+            f,
+            marker: PhantomData,
+        }
     }
 }
 
@@ -63,7 +67,11 @@ where
     #[inline]
     extern "rust-call" fn call_once(self, (arg,): (Rem::Take,)) -> Self::Output {
         let Curry { supplied, f, .. } = self;
-        Curry { supplied: supplied.push(arg), f, marker: PhantomData }
+        Curry {
+            supplied: supplied.push(arg),
+            f,
+            marker: PhantomData,
+        }
     }
 }
 

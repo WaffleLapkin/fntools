@@ -56,7 +56,11 @@ impl<T, F, A> Supply<T, F, A> {
         A: TupleTake<Take = T>,
         A::Rem: TupleAppend<T, Res = A>,
     {
-        Supply { argument, f, marker: PhantomData }
+        Supply {
+            argument,
+            f,
+            marker: PhantomData,
+        }
     }
 }
 
@@ -123,7 +127,7 @@ where
         Supply {
             argument: self.argument.clone(),
             f: self.f.clone(),
-            marker: PhantomData
+            marker: PhantomData,
         }
     }
 }
