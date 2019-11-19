@@ -2,7 +2,7 @@
 ///
 /// # Example
 /// ```
-/// use fntools::flip::flip;
+/// use fntools::flip;
 ///
 /// let fun = |a: &str, b: i32| format!("{}{}", a, b);
 /// let fun = flip(fun);
@@ -19,7 +19,7 @@ where
 
 /// Flip function (which can be called only once) arguments.
 ///
-/// See [flip_args](self::flip_args) for documentation.
+/// See [flip_args](self::flip) for documentation.
 #[inline]
 pub fn flip_once<A, B, R, F>(f: F) -> impl FnOnce(B, A) -> R
 where
@@ -30,7 +30,7 @@ where
 
 /// Flip function (which can be called only by unique reference) arguments.
 ///
-/// See [flip_args](self::flip_args) for documentation.
+/// See [flip_args](self::flip) for documentation.
 #[inline]
 pub fn flip_mut<A, B, R, F>(mut f: F) -> impl FnMut(B, A) -> R
 where

@@ -69,15 +69,34 @@
 #![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
 
 #[macro_use]
+/// Helper macros these are used in this lib
 mod local_macros;
+/// Definitions on public (`#[macro_export]`) macros
+mod macro_def;
+/// 'Sealed' trait that prevents implementing tuple traits in other crates
+mod sealed;
 
-/// Flipping function arguments/output/both
-pub mod flip;
+/// Helper module for moving stable thing to dedicated dir
+mod stable {
+    pub mod chain;
+    pub mod compose;
+    pub mod flip;
+    pub mod product;
+    /// Extensions for all types
+    pub mod value;
+}
+
+pub use stable::{
+    chain::{chain, chain_mut, chain_once},
+    compose::{compose, compose_mut, compose_once},
+    flip::{flip, flip_mut, flip_once},
+    product::{product, product_mut, product_once},
+    value,
+};
+
 /// Features that uses nightly-only unstable API
 #[cfg(not(feature = "stable"))]
 pub mod unstable;
-/// Extension for all types
-pub mod value;
 
 /// Helpers for working with tuples
 ///
@@ -102,212 +121,4 @@ pub mod tuple {
     pub mod push;
     /// Take element from tuple (`(T, A, B) => (T, (A, B))`)
     pub mod take;
-}
-
-pub mod prelude {
-    pub use crate::{chain, value::ValueExt};
-}
-
-mod macro_def;
-
-/// Compose two functions.
-///
-/// Takes functions `f` and `g` and returns `f ∘ g = |a: A| f(g(a))`.
-///
-/// # Examples
-/// ```
-/// use fntools::compose;
-///
-/// let add_two = |a: i32| a + 2;
-/// let add_three = |a: i32| a + 3;
-/// let add_five = compose(add_two, add_three);
-///
-/// assert_eq!(add_five(4), 9);
-/// ```
-///
-/// Note the order:
-/// ```
-/// use fntools::compose;
-///
-/// let to_16 = |i: i8| i16::from(i);
-/// let to_32 = |i: i16| i32::from(i);
-/// let to_64 = |i: i32| i64::from(i);
-///
-/// // execution order: to_16 -> to_32 -> to_64
-/// let i8_to_i64 = compose(compose(to_64, to_32), to_16);
-///
-/// assert_eq!(i8_to_i64(8i8), 8i64);
-/// ```
-///
-/// See also:
-/// - [`unstable::compose`]
-/// - [`fntools::chain`]
-///
-/// [`unstable::compose`]: crate::unstable::compose::compose
-/// [`fntools::chain`]: crate::chain
-#[inline]
-pub fn compose<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C
-where
-    G: Fn(A) -> B,
-    F: Fn(B) -> C,
-{
-    move |a: A| f(g(a))
-}
-
-/// Compose two functions which can be called only once.
-///
-/// See [compose](self::compose) for documentation.
-#[inline]
-pub fn compose_once<A, B, C, F, G>(f: F, g: G) -> impl FnOnce(A) -> C
-where
-    G: FnOnce(A) -> B,
-    F: FnOnce(B) -> C,
-{
-    move |a: A| f(g(a))
-}
-
-/// Compose two functions which can be called only by unique reference.
-///
-/// See [compose](self::compose) for documentation.
-#[inline]
-pub fn compose_mut<A, B, C, F, G>(mut f: F, mut g: G) -> impl FnMut(A) -> C
-where
-    G: FnMut(A) -> B,
-    F: FnMut(B) -> C,
-{
-    move |a: A| f(g(a))
-}
-
-/// Chain two functions.
-///
-/// Takes functions `f` and `g` and returns `g ∘ f = |a: A| g(f(a))`.
-///
-/// # Examples
-/// ```
-/// use fntools::chain;
-///
-/// let add_two = |a: i32| a + 2;
-/// let add_three = |a: i32| a + 3;
-/// let add_five = chain(add_two, add_three);
-///
-/// assert_eq!(add_five(4), 9);
-/// ```
-///
-/// Note the order:
-/// ```
-/// use fntools::chain;
-///
-/// let to_16 = |i: i8| i16::from(i);
-/// let to_32 = |i: i16| i32::from(i);
-/// let to_64 = |i: i32| i64::from(i);
-///
-/// // execution order: to_16 -> to_32 -> to_64
-/// let i8_to_i64 = chain(to_16, chain(to_32, to_64));
-///
-/// assert_eq!(i8_to_i64(8i8), 8i64);
-/// ```
-///
-/// See also:
-/// - [`unstable::chain`]
-/// - [`fntools::compose`]
-///
-/// [`unstable::chain`]: crate::unstable::chain::chain
-/// [`fntools::compose`]: crate::compose
-#[inline]
-pub fn chain<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C
-where
-    F: Fn(A) -> B,
-    G: Fn(B) -> C,
-{
-    move |a: A| g(f(a))
-}
-
-/// Chain two functions which can be called only once.
-///
-/// See [chain](self::chain) for documentation.
-#[inline]
-pub fn chain_once<A, B, C, F, G>(f: F, g: G) -> impl FnOnce(A) -> C
-where
-    F: FnOnce(A) -> B,
-    G: FnOnce(B) -> C,
-{
-    move |a: A| g(f(a))
-}
-
-/// Chain two functions which can be called only by unique reference.
-///
-/// See [chain](self::chain) for documentation.
-#[inline]
-pub fn chain_mut<A, B, C, F, G>(mut f: F, mut g: G) -> impl FnMut(A) -> C
-where
-    F: FnMut(A) -> B,
-    G: FnMut(B) -> C,
-{
-    move |a: A| g(f(a))
-}
-
-/// Cartesian product of functions.
-///
-/// Takes functions `f` and `g` and returns `g × f = |a: A, x: X| (f(a), g(x))`.
-///
-/// ## Example
-/// ```
-/// use fntools::product;
-///
-/// // TODO: better example
-/// let string = "привет";
-/// let (slice, str) = product(<[_]>::len, str::len)(string.as_bytes(), string);
-/// assert_eq!(slice, 12);
-/// assert_eq!(str, 12);
-/// ```
-#[inline]
-pub fn product<A, B, X, Y, F, G>(f: F, g: G) -> impl Fn(A, X) -> (B, Y)
-where
-    F: Fn(A) -> B,
-    G: Fn(X) -> Y,
-{
-    move |a: A, x: X| (f(a), g(x))
-}
-
-/// Cartesian product of functions which can be called only once.
-///
-/// See [product](self::product) for documentation.
-#[inline]
-pub fn product_once<A, B, X, Y, F, G>(f: F, g: G) -> impl FnOnce(A, X) -> (B, Y)
-where
-    F: FnOnce(A) -> B,
-    G: FnOnce(X) -> Y,
-{
-    move |a: A, x: X| (f(a), g(x))
-}
-
-/// Cartesian product of functions which can be called only by unique reference.
-///
-/// See [product](self::product) for documentation.
-#[inline]
-pub fn product_mut<A, B, X, Y, F, G>(mut f: F, mut g: G) -> impl FnMut(A, X) -> (B, Y)
-where
-    F: FnMut(A) -> B,
-    G: FnMut(X) -> Y,
-{
-    move |a: A, x: X| (f(a), g(x))
-}
-
-mod sealed {
-    pub trait Sealed {}
-
-    impl Sealed for () {}
-    impl<S: Sealed> Sealed for &'_ S {}
-    impl<S: Sealed> Sealed for &'_ mut S {}
-
-    macro_rules! tuple_impl {
-        ($( $types:ident, )*) => {
-            impl<$( $types, )*> Sealed for ($( $types, )*)
-            where
-                last_type!($( $types, )*): ?Sized,
-            {}
-        };
-    }
-
-    for_tuples!(A, B, C, D, E, F, G, H, I, J, K, L, # tuple_impl);
 }
