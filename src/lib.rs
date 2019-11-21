@@ -118,4 +118,9 @@ pub mod tuple {
     pub mod push;
     /// Take element from tuple (`(T, A, B) => (T, (A, B))`)
     pub mod take;
+    /// Concat tuples (`(A, B) + (C, D) => (A, B, C, D)`)
+    ///
+    /// **NOTE**: this module is under `#[cfg(feature = "concat")]`
+    #[cfg(feature = "concat")]
+    pub mod concat;
 }
