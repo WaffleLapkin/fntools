@@ -110,9 +110,6 @@ pub mod unstable;
 pub mod tuple {
     /// Append element to tuple (`T + (A, B) => (T, A, B)`)
     pub mod append;
-    /// Provide traits for conversion `&(A, B) => (&A, &B)` and
-    /// `&mut (A, B) => (&mut A, &mut B)`
-    pub mod as_ref;
     /// Flip tuple (`(A, B) => (B, A)`)
     pub mod flip;
     /// Pop element from tuple (`(A, B, T) => ((A, B), T)`)
