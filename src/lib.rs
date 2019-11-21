@@ -7,7 +7,7 @@
 //! - currying (O_O)
 //! - Flipping arguments/output/both
 //! - Cartesian product of functions
-//! - Untupling (running a function `(A, B) -> _` on _argument_ `(A, B)`)
+//! - Untupling (running a function `A, B -> _` on _argument_ `(A, B)`)
 //!
 //! ## DISCLAIMER
 //! This library more an fun experiment with rust, than really useful library.
@@ -36,11 +36,11 @@
 //! ## Unstable API
 //! Unstable API provides these features:
 //! - Multi-argument working (this uses a lot of hacks, but works!)
-//!   + You can e.g. chain `(A, B) -> C` and `C -> D` to receive `(A, B) -> D`
-//!   + You can e.g. chain `A -> (B, C)` and `(B, C) -> D`to receive `A -> D`
-//!   + You can e.g. product `(A, B) -> C` and `X -> Y` to receive `(A, B, X) -> (C, Y)` // TODO
+//!   + You can e.g. chain `A, B -> C` and `C -> D` to receive `A, B -> D`
+//!   + You can e.g. chain `A -> (B, C)` and `B, C -> D`to receive `A -> D`
+//!   + You can e.g. product `A, B -> C` and `X -> Y` to receive `A, B, X -> (C, Y)` // TODO
 //! - Working with all fns at once (no `_mut` and `_once` versions of functions)
-//! - Flipping big functions (e.g.: `(A, B, C) -> D` to `(C, B, A) -> D`) // TODO
+//! - Flipping big functions (e.g.: `A, B, C -> D` to `C, B, A -> D`) // TODO
 //! - Destructing functions into inner functions (e.g.: [`Chain::into_inner`])
 //! - Extensions on `Fn*` traits (e.g.: [`.chain`])
 //!
