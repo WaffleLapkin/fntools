@@ -60,3 +60,5 @@ where
         self
     }
 }
+
+tuple_concat_impl::concat_impls!(A, B, C, D, E, F, G, H, I, J, K; T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10;);
