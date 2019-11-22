@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [push]
 
 name: Continuous integration
 
@@ -24,7 +24,7 @@ jobs:
 
       - name: stable/beta build 
         uses: actions-rs/cargo@v1
-        if: matrix.rust == 'stable'
+        if: matrix.rust == 'stable' || matrix.rust == 'beta'
         with:
           command: build
           args: --verbose --features "stable" 
@@ -38,7 +38,7 @@ jobs:
 
       - name: stable/beta test 
         uses: actions-rs/cargo@v1
-        if: matrix.rust == 'stable'
+        if: matrix.rust == 'stable' || matrix.rust == 'beta'
         with:
           command: test
           args: --verbose --features "stable" 
