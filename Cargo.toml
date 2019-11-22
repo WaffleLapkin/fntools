@@ -4,9 +4,8 @@ version = "0.1.0"
 authors = ["Waffle <wafflelapkin@gmail.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+tuple_concat_impl = { git = "https://github.com/WaffleLapkin/tuple_concat_impls.git", rev = "332d3f053b0b4a1e8ece3988ccc28a3d3819b289", optional = true }
 
 [features]
 # no features by default
@@ -14,3 +13,5 @@ default = []
 
 # Turns _OFF_ features that depend on nightly rust
 stable = []
+# Add features that depend on tuple concatenation (and tuple concatenation itself)
+concat = ["tuple_concat_impl"]

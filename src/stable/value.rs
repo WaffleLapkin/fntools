@@ -24,22 +24,19 @@ pub trait ValueExt {
 
     /// Execute function with reference to `self` and return `self`.
     ///
-    /// Similar to [`dbg!`] macro - `dbg!(expression)` and
-    /// `expression.also(|it| println!("{:?}", it))` do the same[^1] thing.
-    ///
     /// # Examples
     /// ```
     /// use fntools::value::ValueExt;
     ///
     /// let mut also = 0;
     /// let val = (1 + 3)
-    ///     .also(|it: &i32| println!("{}", it)) // will print 4
-    ///     .also(|it| also = it + 1); // mutable state is not really needed here, just for example.
+    ///     .also(|it: &i32| assert_eq!(*it, 4))
+    ///     .also(|it| also = it + 1);
     ///
-    /// assert_eq!(also, 5);
     /// assert_eq!(val, 4);
     /// ```
-    /// [^1]: actually no, cause `dbg!` also prints file/line
+    ///
+    /// See also: [`also_mut`](self::ValueExt::also_mut)
     #[inline]
     fn also<F>(self, f: F) -> Self
     where
@@ -47,6 +44,30 @@ pub trait ValueExt {
         F: FnOnce(&Self) -> (),
     {
         f(&self);
+        self
+    }
+
+    /// Execute function with unique reference to `self` and return `self`.
+    ///
+    /// # Examples
+    /// ```
+    /// use fntools::value::ValueExt;
+    ///
+    /// let val = 8
+    ///     .also_mut(|it: &mut i32| assert_eq!(*it, 8))
+    ///     .also_mut(|it| *it *= 2);
+    ///
+    /// assert_eq!(val, 16);
+    /// ```
+    ///
+    /// See also: [`also`](self::ValueExt::also)
+    #[inline]
+    fn also_mut<F>(mut self, f: F) -> Self
+    where
+        Self: Sized,
+        F: FnOnce(&mut Self) -> (),
+    {
+        f(&mut self);
         self
     }
 }
