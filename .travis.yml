@@ -12,8 +12,8 @@ script:
 jobs:
   include:
     - rust: beta
-      env: FEATURES="--features stable concat"
+      env: FEATURES="--features \"stable concat\""
     - rust: stable
-      env: FEATURES="--features stable concat"
+      env: FEATURES="--features \"stable concat\""
     - rust: nightly
       env: FEATURES="--features concat"
