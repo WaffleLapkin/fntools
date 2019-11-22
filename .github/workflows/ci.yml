@@ -1,0 +1,62 @@
+on: [push, pull_request]
+
+name: Continuous integration
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: 
+          - stable
+          - beta
+          - nightly
+      
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          override: true
+          components: rustfmt, clippy
+
+      - name: stable/beta build 
+        uses: actions-rs/cargo@v1
+        if: matrix.rust == 'stable'
+        with:
+          command: build
+          args: --verbose --features "stable concat" 
+
+      - name: nightly build 
+        uses: actions-rs/cargo@v1
+        if: matrix.rust == 'nightly'
+        with:
+          command: build
+          args: --verbose --features "concat" 
+
+      - name: stable/beta test 
+        uses: actions-rs/cargo@v1
+        if: matrix.rust == 'stable'
+        with:
+          command: test
+          args: --verbose --features "stable concat" 
+
+      - name: nightly test
+        uses: actions-rs/cargo@v1
+        if: matrix.rust == 'nightly'
+        with:
+          command: test
+          args: --verbose --features "concat" 
+
+      - name: fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all-targets -- -D warnings
