@@ -1,7 +1,5 @@
 # fntools
-
-[![Build Status dev](https://img.shields.io/travis/com/WaffleLapkin/fntools/dev?logo=GitHub)](https://travis-ci.com/WaffleLapkin/fntools)
-[![Build Status master](https://travis-ci.com/WaffleLapkin/fntools.svg?branch=master)](https://travis-ci.com/WaffleLapkin/fntools)
+[![CI status](https://github.com/WaffleLapkin/fntools/workflows/Continuous%20integration/badge.svg)](https://github.com/WaffleLapkin/fntools/actions)
 [![Telegram](https://img.shields.io/badge/tg-WaffleLapkin-9cf?logo=telegram)](https://vee.gg/t/WaffleLapkin)
 [![docs.rs](https://img.shields.io/badge/docs.rs-link-blue.svg)](https://docs.rs/fntools)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
