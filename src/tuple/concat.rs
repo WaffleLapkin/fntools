@@ -2,9 +2,29 @@ use crate::tuple::take::TupleTake;
 
 /// Concatenate tuples.
 ///
-/// ## Example
+/// ## Examples
 /// ```
+/// use fntools::tuple::concat::TupleConcat;
 ///
+/// assert_eq!((1, false).concat(("hell", 666)), (1, false, "hell", 666));
+/// assert_eq!((0,).concat(((),)), (0, ()));
+/// ```
+/// Any tuple concatenated with () won't change:
+/// ```
+/// # use fntools::tuple::concat::TupleConcat;
+/// assert_eq!((17, 18).concat(()), (17, 18));
+/// assert_eq!(().concat(("he", "eh")), ("he", "eh"));
+/// ```
+/// The trait is implemented for any tuples which total len <= 12:
+/// ```
+/// # use fntools::tuple::concat::TupleConcat;
+/// assert_eq!((0, 1, 2, 3, 4, 5, 6, 7, 8, 9).concat((10, 11)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+/// assert_eq!((0, 1, 2, 3, 4, 5).concat((6, 7, 8, 9, 10, 11)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+/// assert_eq!((0, 1).concat((2, 3, 4, 5, 6, 7, 8, 9, 10, 11)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+/// ```
+/// But isn't implemented for bigger tuples:
+/// ```compile_fail
+/// assert_eq!((0, 1, 2, 3, 4, 5).concat((6, 7, 8, 9, 10, 11, 12)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
 /// ```
 pub trait TupleConcat<T>: Sized {
     /// Result of concatenation
@@ -16,7 +36,7 @@ pub trait TupleConcat<T>: Sized {
 impl TupleConcat<()> for () {
     type Res = ();
 
-    fn concat(self, other: ()) -> Self::Res {}
+    fn concat(self, _other: ()) -> Self::Res {}
 }
 
 impl<T> TupleConcat<T> for ()
@@ -36,7 +56,7 @@ where
 {
     type Res = T;
 
-    fn concat(self, other: ()) -> Self::Res {
+    fn concat(self, _other: ()) -> Self::Res {
         self
     }
 }
