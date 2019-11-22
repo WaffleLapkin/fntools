@@ -27,28 +27,28 @@ jobs:
         if: matrix.rust == 'stable'
         with:
           command: build
-          args: --verbose --features "stable concat" 
+          args: --verbose --features "stable" 
 
       - name: nightly build 
         uses: actions-rs/cargo@v1
         if: matrix.rust == 'nightly'
         with:
           command: build
-          args: --verbose --features "concat" 
+          args: --verbose --features "" 
 
       - name: stable/beta test 
         uses: actions-rs/cargo@v1
         if: matrix.rust == 'stable'
         with:
           command: test
-          args: --verbose --features "stable concat" 
+          args: --verbose --features "stable" 
 
       - name: nightly test
         uses: actions-rs/cargo@v1
         if: matrix.rust == 'nightly'
         with:
           command: test
-          args: --verbose --features "concat" 
+          args: --verbose --features "" 
 
       - name: fmt
         uses: actions-rs/cargo@v1
