@@ -1,5 +1,4 @@
-use crate::sealed::Sealed;
-use crate::tuple::take::TupleTake;
+use crate::{sealed::Sealed, tuple::take::TupleTake};
 
 /// Append element to the **start** of the tuple, producing new tuple.
 ///
@@ -9,7 +8,10 @@ use crate::tuple::take::TupleTake;
 ///
 /// assert_eq!(().append(1), (1,));
 /// assert_eq!((999,).append("str"), ("str", 999));
-/// assert_eq!((47, "str", 14usize).append(true), (true, 47, "str", 14usize));
+/// assert_eq!(
+///     (47, "str", 14usize).append(true),
+///     (true, 47, "str", 14usize)
+/// );
 /// ```
 pub trait TupleAppend<E>: Sized + Sealed {
     /// Result of the appending element `E` to tuple `Self`
@@ -22,9 +24,7 @@ impl<T> TupleAppend<T> for () {
     type Res = (T,);
 
     #[inline]
-    fn append(self, element: T) -> (T,) {
-        (element,)
-    }
+    fn append(self, element: T) -> (T,) { (element,) }
 }
 
 macro_rules! tuple_impl {

@@ -47,7 +47,8 @@ pub struct Supply<T, F, A> {
     marker: PhantomData<dyn Fn(A)>,
 }
 
-// TODO: for some reasons when param `A` moved to `new` (new<A>) type inference brakes
+// TODO: for some reasons when param `A` moved to `new` (new<A>)
+//   type inference brakes
 impl<T, F, A> Supply<T, F, A> {
     #[inline]
     pub fn new(argument: T, f: F) -> Self

@@ -1,13 +1,12 @@
-use crate::tuple::push::TuplePush;
-use crate::tuple::take::TupleTake;
+use crate::tuple::{push::TuplePush, take::TupleTake};
 use std::marker::PhantomData;
 
 /// **Extremely bad** curring.
 ///
 /// ## Examples
 /// ```
-/// use std::ops::Add;
 /// use fntools::unstable::curry::curry;
+/// use std::ops::Add;
 ///
 /// let fun = curry(i32::add);
 /// let res = fun(2)(2)();

@@ -1,5 +1,4 @@
-use crate::sealed::Sealed;
-use crate::tuple::push::TuplePush;
+use crate::{sealed::Sealed, tuple::push::TuplePush};
 
 /// Popes element from the **end** of the tuple, producing new tuple.
 ///
@@ -31,13 +30,11 @@ pub trait TuplePop: Sized + Sealed {
 }
 
 impl<T> TuplePop for (T,) {
-    type Rem = ();
     type Pop = T;
+    type Rem = ();
 
     #[inline]
-    fn pop(self) -> (Self::Rem, Self::Pop) {
-        ((), self.0)
-    }
+    fn pop(self) -> (Self::Rem, Self::Pop) { ((), self.0) }
 }
 
 macro_rules! tuple_impl {

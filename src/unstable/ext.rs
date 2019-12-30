@@ -36,6 +36,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// let add_two = |a: i32| a + 2;
     /// let add_three = |a: i32| a + 3;
+    /// #[rustfmt::skip]
     /// let add_eight = add_two
     ///     .chain(add_three)
     ///     .chain(add_three);
@@ -55,7 +56,8 @@ pub trait FnExt<Args>: Sized {
         chain(self, g)
     }
 
-    /// Chain two functions (`g ∘ self`) **u**n**t**upling result of the first (`self`).
+    /// Chain two functions (`g ∘ self`) **u**n**t**upling result of the first
+    /// (`self`).
     ///
     /// # Examples:
     /// ```
@@ -80,15 +82,14 @@ pub trait FnExt<Args>: Sized {
     ///
     /// # Examples:
     /// ```
-    /// use fntools::unstable::ext::FnExt;
-    /// use fntools::unstable::compose::compose;
+    /// use fntools::unstable::{compose::compose, ext::FnExt};
     ///
     /// let add_two = |a: i32| a + 2;
     /// let add_three = |a: i32| a + 3;
+    /// #[rustfmt::skip]
     /// let add_eight = add_two
     ///     .compose(add_three)
     ///     .compose(add_three);
-    /// //let add_eight = compose(add_two, compose(add_three, add_three));
     ///
     /// assert_eq!(add_eight(4), 12);
     /// ```
@@ -105,7 +106,8 @@ pub trait FnExt<Args>: Sized {
         compose(self, g)
     }
 
-    /// Compose two functions (`self ∘ g`) **u**n**t**upling result of the first (`g`)
+    /// Compose two functions (`self ∘ g`) **u**n**t**upling result of the first
+    /// (`g`)
     ///
     /// # Examples:
     /// ```
@@ -148,10 +150,10 @@ pub trait FnExt<Args>: Sized {
     ///
     /// ## Example
     /// ```
-    /// use fntools::unstable::supply::supply;
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::{ext::FnExt, supply::supply};
     ///
     /// let fun = |a: i32, b: usize, c: String| format!("a: {}, b: {}, c: {:?}", a, b, c);
+    /// #[rustfmt::skip]
     /// let fun = fun
     ///             .supply(8)
     ///             .supply(16)
@@ -181,8 +183,8 @@ pub trait FnExt<Args>: Sized {
     ///
     /// ## Examples
     /// ```
-    /// use std::ops::Add;
     /// use fntools::unstable::ext::FnExt;
+    /// use std::ops::Add;
     ///
     /// let fun = i32::add.curry();
     /// let res = fun(2)(2)();

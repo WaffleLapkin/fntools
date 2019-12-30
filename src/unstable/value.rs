@@ -7,9 +7,8 @@ pub trait ValueExtUnstable {
     /// ```
     /// use fntools::unstable::value::ValueExtUnstable;
     ///
-    /// let val = (3, 4)
-    ///     .apply_ut(|a, b| a * b);
-    /// //             ^^^^ ---- note: no destructing
+    /// let val = (3, 4).apply_ut(|a, b| a * b);
+    /// //                         ^^^^ ---- note: no destructing
     ///
     /// assert_eq!(val, 12)
     /// ```
@@ -23,8 +22,8 @@ pub trait ValueExtUnstable {
     }
 }
 
-// All functions of `ValueExtUnstable` actually require `Self: Sized` so `T: ?Sized`
-// isn't currently needed, but it's placeholder for future.
+// All functions of `ValueExtUnstable` actually require `Self: Sized` so `T:
+// ?Sized` isn't currently needed, but it's placeholder for future.
 impl<T: ?Sized> ValueExtUnstable for T {
     // use default definitions...
 }

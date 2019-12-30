@@ -1,5 +1,4 @@
-use crate::sealed::Sealed;
-use crate::tuple::append::TupleAppend;
+use crate::{sealed::Sealed, tuple::append::TupleAppend};
 
 /// Takes element from the **start** of the tuple, producing new tuple.
 ///
@@ -32,13 +31,10 @@ pub trait TupleTake: Sized + Sealed {
 
 impl<T> TupleTake for (T,) {
     type Rem = ();
-
     type Take = T;
 
     #[inline]
-    fn take(self) -> (Self::Take, Self::Rem) {
-        (self.0, ())
-    }
+    fn take(self) -> (Self::Take, Self::Rem) { (self.0, ()) }
 }
 
 macro_rules! tuple_impl {
