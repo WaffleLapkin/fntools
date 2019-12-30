@@ -19,7 +19,8 @@
 //! - [tool](https://stebalien.github.io/tool-rs/tool/index.html)
 //! - [compose](https://docs.rs/compose/0.1.0/compose/)
 //!
-//! You know other alternatives? - ping me in [telegram] or open issue on [github]!
+//! You know other alternatives? - ping me in [telegram] or open issue on
+//! [github]!
 //!
 //! ## Stability
 //! This library can work on both `stable` and `nightly` _however_ without
@@ -36,9 +37,10 @@
 //! ## Unstable API
 //! Unstable API provides these features:
 //! - Multi-argument working (this uses a lot of hacks, but works!)
-//!   + You can e.g. chain `A, B -> C` and `C -> D` to receive `A, B -> D`
-//!   + You can e.g. chain `A -> (B, C)` and `B, C -> D`to receive `A -> D`
-//!   + You can e.g. product `A, B -> C` and `X -> Y` to receive `A, B, X -> (C, Y)` // TODO
+//!   - You can e.g. chain `A, B -> C` and `C -> D` to receive `A, B -> D`
+//!   - You can e.g. chain `A -> (B, C)` and `B, C -> D`to receive `A -> D`
+//!   - You can e.g. product `A, B -> C` and `X -> Y` to receive `A, B, X -> (C,
+//!     Y)` // TODO
 //! - Working with all fns at once (no `_mut` and `_once` versions of functions)
 //! - Flipping big functions (e.g.: `A, B, C -> D` to `C, B, A -> D`) // TODO
 //! - Destructing functions into inner functions (e.g.: [`Chain::into_inner`])
@@ -107,10 +109,11 @@ pub mod unstable;
 
 /// Helpers for working with tuples
 ///
-/// **Note**: in all of the traits there is no tuples of arity >= 13 (neither in requirements
-/// neither in return types). It's because Rust current type system can't express "tuple of any
-/// size" (see [Draft RFC: variadic generics] for proposes how to fix this) so this lib follows the
-/// [stdlib] in implementing traits on tuples of arity 12 or less.
+/// **Note**: in all of the traits there is no tuples of arity >= 13 (neither in
+/// requirements neither in return types). It's because Rust current type system
+/// can't express "tuple of any size" (see [Draft RFC: variadic generics] for
+/// proposes how to fix this) so this lib follows the [stdlib] in implementing
+/// traits on tuples of arity 12 or less.
 ///
 /// [Draft RFC: variadic generics]: https://github.com/rust-lang/rfcs/issues/376
 /// [stdlib]: https://doc.rust-lang.org/std/primitive.tuple.html#trait-implementations

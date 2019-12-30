@@ -18,13 +18,25 @@ use crate::tuple::take::TupleTake;
 /// The trait is implemented for any tuples which total len <= 12:
 /// ```
 /// # use fntools::tuple::concat::TupleConcat;
-/// assert_eq!((0, 1, 2, 3, 4, 5, 6, 7, 8, 9).concat((10, 11)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
-/// assert_eq!((0, 1, 2, 3, 4, 5).concat((6, 7, 8, 9, 10, 11)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
-/// assert_eq!((0, 1).concat((2, 3, 4, 5, 6, 7, 8, 9, 10, 11)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
+/// assert_eq!(
+///     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9).concat((10, 11)),
+///     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+/// );
+/// assert_eq!(
+///     (0, 1, 2, 3, 4, 5).concat((6, 7, 8, 9, 10, 11)),
+///     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+/// );
+/// assert_eq!(
+///     (0, 1).concat((2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+///     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+/// );
 /// ```
 /// But isn't implemented for bigger tuples:
 /// ```compile_fail
-/// assert_eq!((0, 1, 2, 3, 4, 5).concat((6, 7, 8, 9, 10, 11, 12)), (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+/// assert_eq!(
+///     (0, 1, 2, 3, 4, 5).concat((6, 7, 8, 9, 10, 11, 12)),
+///     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+/// );
 /// ```
 pub trait TupleConcat<T>: Sized {
     /// Result of concatenation
@@ -45,9 +57,7 @@ where
 {
     type Res = T;
 
-    fn concat(self, other: T) -> Self::Res {
-        other
-    }
+    fn concat(self, other: T) -> Self::Res { other }
 }
 
 impl<T> TupleConcat<()> for T
@@ -56,9 +66,7 @@ where
 {
     type Res = T;
 
-    fn concat(self, _other: ()) -> Self::Res {
-        self
-    }
+    fn concat(self, _other: ()) -> Self::Res { self }
 }
 
 tuple_concat_impl::concat_impls!(A, B, C, D, E, F, G, H, I, J, K; T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10;);

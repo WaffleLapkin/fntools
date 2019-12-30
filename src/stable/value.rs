@@ -7,6 +7,7 @@ pub trait ValueExt {
     /// ```
     /// use fntools::value::ValueExt;
     ///
+    /// #[rustfmt::skip]
     /// let val = (1, 4)
     ///     .apply(|(a, b)| a + b)
     ///     .apply(|it| it * it);

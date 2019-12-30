@@ -1,5 +1,4 @@
-use crate::sealed::Sealed;
-use crate::tuple::pop::TuplePop;
+use crate::{sealed::Sealed, tuple::pop::TuplePop};
 
 /// Push element to the **end** of the tuple, producing new tuple.
 ///
@@ -22,9 +21,7 @@ impl<T> TuplePush<T> for () {
     type Res = (T,);
 
     #[inline]
-    fn push(self, element: T) -> Self::Res {
-        (element,)
-    }
+    fn push(self, element: T) -> Self::Res { (element,) }
 }
 
 macro_rules! tuple_impl {
