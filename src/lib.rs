@@ -69,6 +69,13 @@
 //! [rossetacode.org: Function Composition]: https://rosettacode.org/wiki/Function_composition#Rust
 //! [stackoverflow: How to compose functions in Rust?]: https://stackoverflow.com/questions/45786955/how-to-compose-functions-in-rust
 #![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
+// TODO: find better place to store logo xD
+#![doc(
+    html_favicon_url = "https://cdn.discordapp.com/attachments/536882422848159784/648302525619109889/fxtestlogo.ico"
+)]
+#![doc(
+    html_logo_url = "https://cdn.discordapp.com/attachments/536882422848159784/647078928044916746/logo_v0.1.4.min.svg"
+)]
 
 #[macro_use]
 /// Helper macros these are used in this lib
