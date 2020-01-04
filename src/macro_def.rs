@@ -12,6 +12,10 @@
 ///
 /// assert_eq!(i8_to_i64(8i8), 8i64);
 /// ```
+///
+/// ## Note
+/// With `stable` feature this macro will use `fntools::chain`, and without
+/// `stable` feature this macro will use `fntools::unstable::chain::chain`.
 #[macro_export]
 #[cfg(not(feature = "stable"))]
 macro_rules! chain_many {
@@ -38,6 +42,10 @@ macro_rules! chain_many {
 ///
 /// assert_eq!(i8_to_i64(8i8), 8i64);
 /// ```
+///
+/// ## Note
+/// With `stable` feature this macro will use `fntools::chain`, and without
+/// `stable` feature this macro will use `fntools::unstable::chain::chain`.
 #[macro_export]
 #[cfg(feature = "stable")]
 macro_rules! chain_many {
@@ -47,6 +55,30 @@ macro_rules! chain_many {
 
     ($head:expr, $( $tail:expr ),+ $(,)?) => {
         $crate::chain($head, $crate::chain_many!( $( $tail ),+ ))
+    };
+}
+
+/// Same as [`compose_many`](crate::compose_many), but this macro uses
+/// `fntools::chain_once`
+macro_rules! chain_many_once {
+    ($head:expr, $tail:expr) => {
+        $crate::chain_once($head, $tail)
+    };
+
+    ($head:expr, $( $tail:expr ),+ $(,)?) => {
+        $crate::chain_once($head, $crate::chain_many_once!( $( $tail ),+ ))
+    };
+}
+
+/// Same as [`compose_many`](crate::compose_many), but this macro uses
+/// `fntools::chain_mut`
+macro_rules! chain_many_mut {
+    ($head:expr, $tail:expr) => {
+        $crate::chain_mut($head, $tail)
+    };
+
+    ($head:expr, $( $tail:expr ),+ $(,)?) => {
+        $crate::chain_mut($head, $crate::chain_many_mut!( $( $tail ),+ ))
     };
 }
 
@@ -64,6 +96,10 @@ macro_rules! chain_many {
 ///
 /// assert_eq!(i8_to_i64(8i8), 8i64);
 /// ```
+///
+/// ## Note
+/// With `stable` feature this macro will use `fntools::compose`, and without
+/// `stable` feature this macro will use `fntools::unstable::compose::compose`.
 #[macro_export]
 #[cfg(not(feature = "stable"))]
 macro_rules! compose_many {
@@ -90,6 +126,10 @@ macro_rules! compose_many {
 ///
 /// assert_eq!(i8_to_i64(8i8), 8i64);
 /// ```
+///
+/// ## Note
+/// With `stable` feature this macro will use `fntools::compose`, and without
+/// `stable` feature this macro will use `fntools::unstable::compose::compose`.
 #[macro_export]
 #[cfg(feature = "stable")]
 macro_rules! compose_many {
@@ -99,5 +139,31 @@ macro_rules! compose_many {
 
     ($head:expr, $( $tail:expr ),+ $(,)?) => {
         $crate::compose($head, $crate::compose_many!( $( $tail ),+ ))
+    };
+}
+
+/// Same as [`compose_many`](crate::compose_many), but this macro uses
+/// `fntools::compose_once`
+#[macro_export]
+macro_rules! compose_many_once {
+    ($head:expr, $tail:expr) => {
+        $crate::compose_once($head, $tail)
+    };
+
+    ($head:expr, $( $tail:expr ),+ $(,)?) => {
+        $crate::compose_once($head, $crate::compose_many_once!( $( $tail ),+ ))
+    };
+}
+
+/// Same as [`compose_many`](crate::compose_many), but this macro uses
+/// `fntools::compose_mut`
+#[macro_export]
+macro_rules! compose_many_mut {
+    ($head:expr, $tail:expr) => {
+        $crate::compose_mut($head, $tail)
+    };
+
+    ($head:expr, $( $tail:expr ),+ $(,)?) => {
+        $crate::compose_mut($head, $crate::compose_many_mut!( $( $tail ),+ ))
     };
 }
