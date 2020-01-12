@@ -60,6 +60,7 @@ macro_rules! chain_many {
 
 /// Same as [`compose_many`](crate::compose_many), but this macro uses
 /// `fntools::chain_once`
+#[macro_export]
 macro_rules! chain_many_once {
     ($head:expr, $tail:expr) => {
         $crate::chain_once($head, $tail)
@@ -72,6 +73,7 @@ macro_rules! chain_many_once {
 
 /// Same as [`compose_many`](crate::compose_many), but this macro uses
 /// `fntools::chain_mut`
+#[macro_export]
 macro_rules! chain_many_mut {
     ($head:expr, $tail:expr) => {
         $crate::chain_mut($head, $tail)
