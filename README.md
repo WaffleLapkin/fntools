@@ -19,3 +19,5 @@ assert_eq!(fun(13, 10), (1, 3));
 This library more an fun experiment with rust, than really useful library.
 
 However, in some cases it can make code a bit cleaner.
+
+c,rinuvntuvby
