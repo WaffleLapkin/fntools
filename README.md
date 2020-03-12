@@ -1,10 +1,16 @@
 # fntools
+
 [![CI status](https://github.com/WaffleLapkin/fntools/workflows/Continuous%20integration/badge.svg)](https://github.com/WaffleLapkin/fntools/actions)
 [![Telegram](https://img.shields.io/badge/tg-WaffleLapkin-9cf?logo=telegram)](https://vee.gg/t/WaffleLapkin)
-[![docs.rs](https://img.shields.io/badge/docs.rs-link-blue.svg)](https://docs.rs/fntools)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![crates.io](https://img.shields.io/badge/crates.io-v0.1.0-orange.svg)](https://crates.io/crates/fntools)
+[![Documentation (dev)](https://img.shields.io/badge/docs-dev-blue)](https://fntools.netlify.com/fntools)
 
+<!--
+(commented until release)
+
+[![docs.rs](https://img.shields.io/badge/docs.rs-v0.1.0-blue.svg)](https://docs.rs/fntools)
+[![crates.io](https://img.shields.io/badge/crates.io-v0.1.0-orange.svg)](https://crates.io/crates/fntools)
+-->
 
 <img height="256" width="256" align="left" src="./logo.svg" alt="logo"> Weird tools for working with functions in rust <pre lang="rust">let fun = (|a, b| a + b)
 &nbsp;   .chain(|x| (x % 2, x % 4))
