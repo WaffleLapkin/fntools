@@ -11,5 +11,6 @@ pub mod curry;
 pub mod ext;
 pub mod flip;
 pub mod supply;
+pub mod unit;
 pub mod untuple;
 pub mod value;

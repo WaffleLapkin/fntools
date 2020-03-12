@@ -6,6 +6,7 @@ use crate::{
         curry::{curry, Curry},
         flip::{flip, Flip},
         supply::{supply, Supply},
+        unit::{unit, Unit},
         untuple::{untuple, Untuple},
     },
 };
@@ -197,6 +198,25 @@ pub trait FnExt<Args>: Sized {
         Self: FnOnce<Args>,
     {
         curry(self)
+    }
+
+    /// Unit function output
+    ///
+    /// ## Examples
+    ///
+    /// ```
+    /// use fntools::unstable::ext::FnExt;
+    /// use std::ops::Sub;
+    ///
+    /// let fun = i32::sub.unit();
+    /// assert_eq!(fun(2, 1), ());
+    /// ```
+    #[inline]
+    fn unit(self) -> Unit<Self>
+    where
+        Self: FnOnce<Args>,
+    {
+        unit(self)
     }
 }
 

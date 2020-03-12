@@ -91,6 +91,8 @@ mod stable {
     pub mod compose;
     pub mod flip;
     pub mod product;
+    /// Unit function output.
+    pub mod unit;
     /// Extensions for all types
     pub mod value;
 }
@@ -100,6 +102,7 @@ pub use stable::{
     compose::{compose, compose_mut, compose_once},
     flip::{flip, flip_mut, flip_once},
     product::{product, product_mut, product_once},
+    unit::{unit, unit_mut, unit_once},
     value,
 };
 
