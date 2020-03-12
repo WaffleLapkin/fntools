@@ -133,4 +133,6 @@ pub mod tuple {
     pub mod push;
     /// Take element from tuple (`(T, A, B) => (T, (A, B))`)
     pub mod take;
+
+    pub mod at_least_2;
 }

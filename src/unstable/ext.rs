@@ -187,12 +187,11 @@ pub trait FnExt<Args>: Sized {
     /// use std::ops::Add;
     ///
     /// let fun = i32::add.curry();
-    /// let res = fun(2)(2)();
-    /// //                 ^^ ---- yep, you need this, sorry :(
+    /// let res = fun(2)(2);
     /// assert_eq!(res, 4);
     /// ```
     #[inline]
-    fn curry(self) -> Curry<(), Self, Args, Args>
+    fn curry(self) -> Curry<(), Self, Args>
     where
         Self: FnOnce<Args>,
     {
