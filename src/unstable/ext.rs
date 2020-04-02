@@ -33,7 +33,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// # Examples:
     /// ```
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::FnExt;
     ///
     /// let add_two = |a: i32| a + 2;
     /// let add_three = |a: i32| a + 3;
@@ -62,7 +62,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// # Examples:
     /// ```
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::FnExt;
     ///
     /// let tuple = |a| (a, 8);
     /// let add_eight = tuple.chain_ut(|a, b| a + b);
@@ -83,7 +83,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// # Examples:
     /// ```
-    /// use fntools::unstable::{compose::compose, ext::FnExt};
+    /// use fntools::unstable::{compose, FnExt};
     ///
     /// let add_two = |a: i32| a + 2;
     /// let add_three = |a: i32| a + 3;
@@ -112,7 +112,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// # Examples:
     /// ```
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::FnExt;
     ///
     /// let tuple = |a| (a, 8);
     /// let add = |a, b| a + b;
@@ -123,7 +123,7 @@ pub trait FnExt<Args>: Sized {
     /// ```
     ///
     /// ```
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::FnExt;
     ///
     /// // very bad impl of `checked_add`
     /// let my_checked_add =  (|res, over| if over { None } else { Some(res) }).compose_ut(i32::overflowing_add);
@@ -151,7 +151,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// ## Example
     /// ```
-    /// use fntools::unstable::{ext::FnExt, supply::supply};
+    /// use fntools::unstable::{supply, FnExt};
     ///
     /// let fun = |a: i32, b: usize, c: String| format!("a: {}, b: {}, c: {:?}", a, b, c);
     /// #[rustfmt::skip]
@@ -184,7 +184,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// ## Examples
     /// ```
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::FnExt;
     /// use std::ops::Add;
     ///
     /// let fun = i32::add.curry();
@@ -204,7 +204,7 @@ pub trait FnExt<Args>: Sized {
     /// ## Examples
     ///
     /// ```
-    /// use fntools::unstable::ext::FnExt;
+    /// use fntools::unstable::FnExt;
     /// use std::ops::Sub;
     ///
     /// let fun = i32::sub.unit();

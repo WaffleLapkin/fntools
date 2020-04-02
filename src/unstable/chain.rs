@@ -5,7 +5,7 @@
 ///
 /// # Examples:
 /// ```
-/// use fntools::unstable::chain::chain;
+/// use fntools::unstable::chain;
 ///
 /// let add_two = |a: i32| a + 2;
 /// let add_three = |a: i32| a + 3;

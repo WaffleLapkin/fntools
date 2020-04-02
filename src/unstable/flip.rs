@@ -3,7 +3,7 @@ use crate::tuple::flip::FlipTuple;
 /// Flip function arguments
 ///
 /// ```
-/// use fntools::unstable::flip::flip;
+/// use fntools::unstable::flip;
 ///
 /// let fun = flip(<[_]>::split_at);
 /// assert_eq!(fun(2, &[0, 1, 2, 3, 4]), (&[0, 1][..], &[2, 3, 4][..]))
@@ -22,7 +22,7 @@ pub struct Flip<F>(F);
 
 impl<F> Flip<F> {
     /// ```
-    /// use fntools::unstable::flip::{flip, Flip};
+    /// use fntools::unstable::{flip, Flip};
     ///
     /// let fun = Flip::new(<[_]>::split_at);
     /// assert_eq!(fun(2, &[0, 1, 2, 3, 4]), (&[0, 1][..], &[2, 3, 4][..]))

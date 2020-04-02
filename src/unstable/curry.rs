@@ -6,7 +6,7 @@ use crate::tuple::{at_least_2::AtLeast2, push::TuplePush, take::TupleTake};
 ///
 /// ## Examples
 /// ```
-/// use fntools::unstable::curry::curry;
+/// use fntools::unstable::curry;
 /// use std::ops::Add;
 ///
 /// let fun = curry(i32::add);

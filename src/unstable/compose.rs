@@ -6,7 +6,7 @@
 /// # Examples:
 ///
 /// ```
-/// use fntools::unstable::compose::compose;
+/// use fntools::unstable::compose;
 ///
 /// let add_two = |a: i32| a + 2;
 /// let add_three = |a: i32| a + 3;

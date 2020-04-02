@@ -9,7 +9,7 @@ use crate::tuple::{append::TupleAppend, take::TupleTake};
 ///
 /// ## Examples
 /// ```
-/// use fntools::unstable::supply::supply;
+/// use fntools::unstable::supply;
 ///
 /// let add = |a: i32, b: i32| a + b;
 /// let add_5 = supply(5, add);
@@ -18,7 +18,7 @@ use crate::tuple::{append::TupleAppend, take::TupleTake};
 /// assert_eq!(add_5(661), 666);
 /// ```
 /// ```
-/// use fntools::unstable::supply::supply;
+/// use fntools::unstable::supply;
 ///
 /// let fun = |a: i32, b: usize, c: String| format!("a: {}, b: {}, c: {:?}", a, b, c);
 /// let fun = supply(8, fun);

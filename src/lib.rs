@@ -108,7 +108,29 @@ pub use stable::{
 
 /// Features that uses nightly-only unstable API
 #[cfg(not(feature = "stable"))]
-pub mod unstable;
+pub mod unstable {
+    pub use self::{
+        chain::{chain, Chain},
+        compose::{compose, Compose},
+        curry::{curry, Curry},
+        ext::FnExt,
+        flip::{flip, Flip},
+        supply::{supply, Supply},
+        unit::{unit, Unit},
+        untuple::{untuple, Untuple},
+        value::ValueExtUnstable,
+    };
+
+    mod chain;
+    mod compose;
+    mod curry;
+    mod ext;
+    mod flip;
+    mod supply;
+    mod unit;
+    mod untuple;
+    mod value;
+}
 
 /// Helpers for working with tuples
 ///

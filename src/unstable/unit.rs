@@ -3,7 +3,7 @@
 /// ## Examples
 ///
 /// ```
-/// use fntools::unstable::unit::unit;
+/// use fntools::unstable::unit;
 ///
 /// let add = unit(|a: i32, b: i32| a + b);
 ///
