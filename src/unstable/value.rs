@@ -5,7 +5,7 @@ pub trait ValueExtUnstable {
     ///
     /// # Examples
     /// ```
-    /// use fntools::unstable::value::ValueExtUnstable;
+    /// use fntools::unstable::ValueExtUnstable;
     ///
     /// let val = (3, 4).apply_ut(|a, b| a * b);
     /// //                         ^^^^ ---- note: no destructing

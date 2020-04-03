@@ -20,11 +20,11 @@
 #[cfg(not(feature = "stable"))]
 macro_rules! chain_many {
     ($head:expr, $tail:expr) => {
-        $crate::unstable::chain::chain($head, $tail)
+        $crate::unstable::chain($head, $tail)
     };
 
     ($head:expr, $( $tail:expr ),+ $(,)?) => {
-        $crate::unstable::chain::chain($head, $crate::chain_many!( $( $tail ),+ ))
+        $crate::unstable::chain($head, $crate::chain_many!( $( $tail ),+ ))
     };
 }
 
@@ -106,11 +106,11 @@ macro_rules! chain_many_mut {
 #[cfg(not(feature = "stable"))]
 macro_rules! compose_many {
     ($head:expr, $tail:expr) => {
-        $crate::unstable::compose::compose($head, $tail)
+        $crate::unstable::compose($head, $tail)
     };
 
     ($head:expr, $( $tail:expr ),+ $(,)?) => {
-        $crate::unstable::compose::compose($head, $crate::compose_many!( $( $tail ),+ ))
+        $crate::unstable::compose($head, $crate::compose_many!( $( $tail ),+ ))
     };
 }
 
