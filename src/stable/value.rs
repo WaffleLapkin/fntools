@@ -45,10 +45,12 @@ pub trait ValueExt {
         self
     }
 
-    /// Execute function with unique reference to deref-target of `self` and return `self`.
+    /// Execute function with unique reference to deref-target of `self` and
+    /// return `self`.
     ///
-    /// This may be useful when you want to use `.also(T::fun)` on value of type `U` where
-    /// `U: DerefMut<Target = T>` (e.g.: `Vec`+`[_]`, `String`+`str`, `Box<T>`+`T`)
+    /// This may be useful when you want to use `.also(T::fun)` on value of type
+    /// `U` where `U: DerefMut<Target = T>` (e.g.: `Vec`+`[_]`,
+    /// `String`+`str`, `Box<T>`+`T`)
     ///
     /// ## Examples
     ///
