@@ -44,6 +44,35 @@ pub trait ValueExt {
         f(&mut self);
         self
     }
+
+    /// Execute function with unique reference to deref-target of `self` and return `self`.
+    ///
+    /// This may be useful when you want to use `.also(T::fun)` on value of type `U` where
+    /// `U: DerefMut<Target = T>` (e.g.: `Vec`+`[_]`, `String`+`str`, `Box<T>`+`T`)
+    ///
+    /// ## Examples
+    ///
+    /// ```
+    /// use fntools::value::ValueExt;
+    ///
+    /// let val = vec![2, 1].also_deref(<[_]>::sort);
+    /// assert_eq!(val, [1, 2]);
+    ///
+    /// let what = String::from("what?").also_deref(str::make_ascii_uppercase);
+    /// assert_eq!(what, "WHAT?");
+    ///
+    /// let boxed = Box::<str>::from("BOXED").also_deref(str::make_ascii_lowercase);
+    /// assert_eq!(&*boxed, "boxed");
+    /// ```
+    #[inline]
+    fn also_deref<F>(mut self, f: F) -> Self
+    where
+        Self: Sized + core::ops::DerefMut,
+        F: FnOnce(&mut Self::Target) -> (),
+    {
+        f(self.deref_mut());
+        self
+    }
 }
 
 // All functions of `ValueExt` actually require `Self: Sized` so `T: ?Sized`
