@@ -76,6 +76,8 @@
 #![doc(
     html_logo_url = "https://cdn.discordapp.com/attachments/536882422848159784/647078928044916746/logo_v0.1.4.min.svg"
 )]
+// I want explicit `Fn(Arg) -> ()`
+#![allow(clippy::unused_unit)]
 
 #[macro_use]
 /// Helper macros these are used in this lib
