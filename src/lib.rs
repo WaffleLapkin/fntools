@@ -30,7 +30,8 @@
 //! This library can work on both `stable` and `nightly` _however_ without
 //! nightly it loses **a lot** of core functionality.
 //!
-//! To build with `nightly` features you need to enable `"nightly"` crate feature:
+//! To build with `nightly` features you need to enable `"nightly"` crate
+//! feature:
 //! ```toml
 //! // Cargo.toml
 //! fntools = { version = "0.1.0", features = ["nightly"] }
