@@ -14,10 +14,11 @@
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::chain`, and without
-/// `stable` feature this macro will use `fntools::unstable::chain::chain`.
+///
+/// Without `nightly` feature this macro will use `fntools::chain`, and with
+/// `nightly` feature this macro will use `fntools::unstable::chain::chain`.
 #[macro_export]
-#[cfg(not(feature = "stable"))]
+#[cfg(feature = "nightly")]
 macro_rules! chain_many {
     ($head:expr, $tail:expr) => {
         $crate::unstable::chain($head, $tail)
@@ -44,10 +45,11 @@ macro_rules! chain_many {
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::chain`, and without
-/// `stable` feature this macro will use `fntools::unstable::chain::chain`.
+///
+/// Without `nightly` feature this macro will use `fntools::chain`, and with
+/// `nightly` feature this macro will use `fntools::unstable::chain::chain`.
 #[macro_export]
-#[cfg(feature = "stable")]
+#[cfg(not(feature = "nightly"))]
 macro_rules! chain_many {
     ($head:expr, $tail:expr) => {
         $crate::chain($head, $tail)
@@ -100,10 +102,11 @@ macro_rules! chain_many_mut {
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::compose`, and without
-/// `stable` feature this macro will use `fntools::unstable::compose::compose`.
+///
+/// Without `nightly` feature this macro will use `fntools::compose`, and with
+/// `nightly` feature this macro will use `fntools::unstable::compose::compose`.
 #[macro_export]
-#[cfg(not(feature = "stable"))]
+#[cfg(feature = "nightly")]
 macro_rules! compose_many {
     ($head:expr, $tail:expr) => {
         $crate::unstable::compose($head, $tail)
@@ -130,10 +133,11 @@ macro_rules! compose_many {
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::compose`, and without
-/// `stable` feature this macro will use `fntools::unstable::compose::compose`.
+///
+/// Without `nightly` feature this macro will use `fntools::compose`, and with
+/// `nightly` feature this macro will use `fntools::unstable::compose::compose`.
 #[macro_export]
-#[cfg(feature = "stable")]
+#[cfg(not(feature = "nightly"))]
 macro_rules! compose_many {
     ($head:expr, $tail:expr) => {
         $crate::compose($head, $tail)

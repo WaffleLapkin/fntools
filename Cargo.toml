@@ -11,7 +11,7 @@ tuple_concat_impl = { git = "https://github.com/WaffleLapkin/tuple_concat_impls.
 # no features by default
 default = []
 
-# Turns _OFF_ features that depend on nightly rust
-stable = []
+# Turns on features that depend on nightly rust
+nightly = []
 # Add features that depend on tuple concatenation (and tuple concatenation itself)
 concat = ["tuple_concat_impl"]

@@ -1,4 +1,5 @@
 //! ## Tools for working with functions
+//!
 //! e.g.:
 //! - chaining
 //! - composing
@@ -10,11 +11,13 @@
 //! - Untupling (running a function `A, B -> _` on _argument_ `(A, B)`)
 //!
 //! ## DISCLAIMER
+//!
 //! This library more an fun experiment with rust, than really useful library.
 //!
 //! However, in some cases it can make code a bit cleaner.
 //!
 //! ## Alternatives
+//!
 //! Similar libraries:
 //! - [tool](https://stebalien.github.io/tool-rs/tool/index.html)
 //! - [compose](https://docs.rs/compose/0.1.0/compose/)
@@ -23,18 +26,21 @@
 //! [github]!
 //!
 //! ## Stability
+//!
 //! This library can work on both `stable` and `nightly` _however_ without
 //! nightly it loses **a lot** of core functionality.
 //!
-//! To build on `stable` you need to add `"stable"` feature:
+//! To build with `nightly` features you need to enable `"nightly"` crate
+//! feature:
 //! ```toml
 //! // Cargo.toml
-//! fntools = { version = "0.1.0", features = ["stable"] }
+//! fntools = { version = "0.1.0", features = ["nightly"] }
 //! ```
-//! This will remove [`unstable`] module with all the APIs which use
+//! This will add [`unstable`] module with all the APIs which use
 //! nightly-only unstable API.
 //!
 //! ## Unstable API
+//!
 //! Unstable API provides these features:
 //! - Multi-argument working (this uses a lot of hacks, but works!)
 //!   - You can e.g. chain `A, B -> C` and `C -> D` to receive `A, B -> D`
@@ -49,6 +55,7 @@
 //! Using [`unboxed_closures`] and [`fn_traits`] features ([tracking issue])
 //!
 //! ## See also
+//!
 //! - [Wiki: Function Composition]
 //! - [rossetacode.org: Function Composition]
 //! - [stackoverflow: How to compose functions in Rust?]
@@ -68,7 +75,7 @@
 //! [Wiki: Function Composition]: https://en.wikipedia.org/wiki/Function_composition
 //! [rossetacode.org: Function Composition]: https://rosettacode.org/wiki/Function_composition#Rust
 //! [stackoverflow: How to compose functions in Rust?]: https://stackoverflow.com/questions/45786955/how-to-compose-functions-in-rust
-#![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
+#![cfg_attr(feature = "nightly", feature(unboxed_closures, fn_traits))]
 #![doc(html_favicon_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/icon.ico")]
 #![doc(html_logo_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/logo.svg")]
 // I want explicit `Fn(Arg) -> ()`
@@ -104,7 +111,7 @@ pub use stable::{
 };
 
 /// Features that uses nightly-only unstable API
-#[cfg(not(feature = "stable"))]
+#[cfg(feature = "nightly")]
 pub mod unstable {
     pub use self::{
         chain::{chain, Chain},

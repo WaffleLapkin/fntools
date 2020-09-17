@@ -11,6 +11,14 @@ jobs:
           - stable
           - beta
           - nightly
+
+        include:
+          - rust: stable
+            features: "--features \"concat\""
+          - rust: beta
+            features: "--features \"concat\""
+          - rust: nightly
+            features: "--all-features"
       
     steps:
       - uses: actions/checkout@v1
@@ -22,51 +30,52 @@ jobs:
           override: true
           components: rustfmt, clippy
 
-      - name: stable/beta build 
+      - name: build
         uses: actions-rs/cargo@v1
-        if: matrix.rust == 'stable' || matrix.rust == 'beta'
         with:
           command: build
-          args: --verbose --features "stable" 
+          args: --verbose ${{ matrix.features }}
 
-      - name: nightly build 
+      - name: test
         uses: actions-rs/cargo@v1
-        if: matrix.rust == 'nightly'
-        with:
-          command: build
-          args: --verbose --features "" 
-
-      - name: stable/beta test 
-        uses: actions-rs/cargo@v1
-        if: matrix.rust == 'stable' || matrix.rust == 'beta'
         with:
           command: test
-          args: --verbose --features "stable" 
+          args: --verbose ${{ matrix.features }}
 
-      - name: nightly test
-        uses: actions-rs/cargo@v1
-        if: matrix.rust == 'nightly'
+  clippy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions-rs/toolchain@v1
         with:
-          command: test
-          args: --verbose --features "" 
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: clippy
+
+      - name: clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all-targets --all-features -- -D warnings
+
+  style:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt
 
       - name: fmt
         uses: actions-rs/cargo@v1
-        if: matrix.rust == 'nightly'
         with:
           command: fmt
           args: --all -- --check
-
-      - name: stable/beta clippy
-        uses: actions-rs/cargo@v1
-        if: matrix.rust == 'stable' || matrix.rust == 'beta'
-        with:
-          command: clippy
-          args: --all-targets --features "stable" -- -D warnings
-
-      - name: nightly clippy
-        uses: actions-rs/cargo@v1
-        if: matrix.rust == 'nightly'
-        with:
-          command: clippy
-          args: --all-targets --features "stable" -- -D warnings
