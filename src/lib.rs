@@ -69,12 +69,8 @@
 //! [rossetacode.org: Function Composition]: https://rosettacode.org/wiki/Function_composition#Rust
 //! [stackoverflow: How to compose functions in Rust?]: https://stackoverflow.com/questions/45786955/how-to-compose-functions-in-rust
 #![cfg_attr(not(feature = "stable"), feature(unboxed_closures, fn_traits))]
-#![doc(
-    html_favicon_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/icon.ico"
-)]
-#![doc(
-    html_logo_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/logo.svg"
-)]
+#![doc(html_favicon_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/icon.ico")]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/logo.svg")]
 // I want explicit `Fn(Arg) -> ()`
 #![allow(clippy::unused_unit)]
 
