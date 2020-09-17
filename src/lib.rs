@@ -30,12 +30,12 @@
 //! This library can work on both `stable` and `nightly` _however_ without
 //! nightly it loses **a lot** of core functionality.
 //!
-//! To build on `stable` you need to add `"stable"` feature:
+//! To build with `nightly` features you need to enable `"nightly"` crate feature:
 //! ```toml
 //! // Cargo.toml
-//! fntools = { version = "0.1.0", features = ["stable"] }
+//! fntools = { version = "0.1.0", features = ["nightly"] }
 //! ```
-//! This will remove [`unstable`] module with all the APIs which use
+//! This will add [`unstable`] module with all the APIs which use
 //! nightly-only unstable API.
 //!
 //! ## Unstable API

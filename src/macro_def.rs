@@ -14,8 +14,9 @@
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::chain`, and without
-/// `stable` feature this macro will use `fntools::unstable::chain::chain`.
+///
+/// Without `nightly` feature this macro will use `fntools::chain`, and with
+/// `nightly` feature this macro will use `fntools::unstable::chain::chain`.
 #[macro_export]
 #[cfg(feature = "nightly")]
 macro_rules! chain_many {
@@ -44,8 +45,9 @@ macro_rules! chain_many {
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::chain`, and without
-/// `stable` feature this macro will use `fntools::unstable::chain::chain`.
+///
+/// Without `nightly` feature this macro will use `fntools::chain`, and with
+/// `nightly` feature this macro will use `fntools::unstable::chain::chain`.
 #[macro_export]
 #[cfg(not(feature = "nightly"))]
 macro_rules! chain_many {
@@ -100,8 +102,9 @@ macro_rules! chain_many_mut {
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::compose`, and without
-/// `stable` feature this macro will use `fntools::unstable::compose::compose`.
+///
+/// Without `nightly` feature this macro will use `fntools::compose`, and with
+/// `nightly` feature this macro will use `fntools::unstable::compose::compose`.
 #[macro_export]
 #[cfg(feature = "nightly")]
 macro_rules! compose_many {
@@ -130,8 +133,9 @@ macro_rules! compose_many {
 /// ```
 ///
 /// ## Note
-/// With `stable` feature this macro will use `fntools::compose`, and without
-/// `stable` feature this macro will use `fntools::unstable::compose::compose`.
+///
+/// Without `nightly` feature this macro will use `fntools::compose`, and with
+/// `nightly` feature this macro will use `fntools::unstable::compose::compose`.
 #[macro_export]
 #[cfg(not(feature = "nightly"))]
 macro_rules! compose_many {
