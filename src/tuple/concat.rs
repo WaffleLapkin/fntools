@@ -42,6 +42,7 @@ pub trait TupleConcat<T>: Sized {
     /// Result of concatenation
     type Res;
 
+    /// Concatenates 2 tuples.
     fn concat(self, other: T) -> Self::Res;
 }
 

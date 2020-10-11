@@ -1,4 +1,7 @@
-use std::marker::PhantomData;
+use std::{
+    fmt::{Debug, Error, Formatter},
+    marker::PhantomData,
+};
 
 use crate::tuple::{at_least_2::AtLeast2, push::TuplePush, take::TupleTake};
 
@@ -21,6 +24,9 @@ where
     Curry::new(f)
 }
 
+/// Represents curried function `F`.
+///
+/// For documentation see [`curry`].
 pub struct Curry<Supplied, F, Remaining> {
     supplied: Supplied,
     f: F,
@@ -29,6 +35,9 @@ pub struct Curry<Supplied, F, Remaining> {
 
 // Nothing is supplied, everything is remaining
 impl<F, Rem> Curry<(), F, Rem> {
+    /// Creates curried function `f`.
+    ///
+    /// It's preferred to use [`curry`] instead.
     #[inline]
     pub fn new(f: F) -> Self
     where
@@ -43,15 +52,25 @@ impl<F, Rem> Curry<(), F, Rem> {
 }
 
 impl<S, F, Rem> Curry<S, F, Rem> {
+    /// Returns supplied arguments and inner function.
     #[inline]
     pub fn into_inner(self) -> (S, F) {
-        let Curry { supplied, f, .. } = self;
+        let Curry {
+            supplied,
+            f,
+            marker: _,
+        } = self;
         (supplied, f)
     }
 
+    /// Returns references to supplied arguments and inner function.
     #[inline]
     pub fn as_inner(&self) -> (&S, &F) {
-        let Curry { supplied, f, .. } = self;
+        let Curry {
+            supplied,
+            f,
+            marker: _,
+        } = self;
         (supplied, f)
     }
 }
@@ -126,6 +145,41 @@ where
         let supplied = supplied.clone().push(arg);
         f.call(supplied)
     }
+}
+
+impl<T, F, R> Debug for Curry<T, F, R>
+where
+    T: Debug,
+    F: Debug,
+{
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        f.debug_struct("Curry")
+            .field("supplied", &self.supplied)
+            .field("f", &self.f)
+            .finish()
+    }
+}
+
+impl<T, F, R> Clone for Curry<T, F, R>
+where
+    T: Clone,
+    F: Clone,
+{
+    #[inline]
+    fn clone(&self) -> Self {
+        Curry {
+            supplied: self.supplied.clone(),
+            f: self.f.clone(),
+            marker: PhantomData,
+        }
+    }
+}
+
+impl<T, F, R> Copy for Curry<T, F, R>
+where
+    T: Copy,
+    F: Copy,
+{
 }
 
 #[cfg(test)]

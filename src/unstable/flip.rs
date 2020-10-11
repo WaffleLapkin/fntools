@@ -1,12 +1,15 @@
 use crate::tuple::flip::FlipTuple;
 
-/// Flip function arguments
+/// Flips argument order of `self`.
 ///
+/// # Example
 /// ```
 /// use fntools::unstable::flip;
 ///
-/// let fun = flip(<[_]>::split_at);
-/// assert_eq!(fun(2, &[0, 1, 2, 3, 4]), (&[0, 1][..], &[2, 3, 4][..]))
+/// let fun = |a: &str, b: i32, c: char| format!("{}{}{}", a, b, c);
+/// let fun = flip(fun);
+///
+/// assert_eq!(fun('c', 17, "hello, "), "hello, 17c")
 /// ```
 pub fn flip<A, F>(f: F) -> Flip<F>
 where
@@ -16,17 +19,17 @@ where
     Flip::new(f)
 }
 
+/// Represents function `F` with flipped argument order.
+///
+/// For documentation see [`flip`].
 #[must_use = "function combinators are lazy and do nothing unless called"]
 #[derive(Debug, Clone, Copy)]
 pub struct Flip<F>(F);
 
 impl<F> Flip<F> {
-    /// ```
-    /// use fntools::unstable::{flip, Flip};
+    /// Creates curried function `f`.
     ///
-    /// let fun = Flip::new(<[_]>::split_at);
-    /// assert_eq!(fun(2, &[0, 1, 2, 3, 4]), (&[0, 1][..], &[2, 3, 4][..]))
-    /// ```
+    /// It's preferred to use [`flip`] instead.
     #[inline]
     pub fn new<A>(f: F) -> Self
     where
@@ -36,12 +39,14 @@ impl<F> Flip<F> {
         Flip(f)
     }
 
+    /// Returns inner function.
     #[inline]
     pub fn into_inner(self) -> F {
         let Flip(f) = self;
         f
     }
 
+    /// Returns reference to inner function.
     #[inline]
     pub fn as_inner(&self) -> &F {
         let Flip(f) = self;

@@ -18,7 +18,7 @@
 /// - stable version of this function: [`fntools::chain`]
 /// - extension on all functions: [`FnExt::chain`]
 ///
-/// [`FnExt::chain`]: crate::unstable::ext::FnExt::chain
+/// [`FnExt::chain`]: crate::unstable::FnExt::chain
 /// [`fntools::chain`]: crate::chain
 #[inline]
 pub fn chain<A, F, G>(f: F, g: G) -> Chain<F, G>
@@ -29,14 +29,13 @@ where
     Chain::new(f, g)
 }
 
-/// Represent composition of 2 functions `G ∘ F`
+/// Represents composition of 2 functions `G ∘ F`.
 ///
-/// Note: `Chain` and [`Compose`] have no differences but argument order.
+/// > Note: `Chain` and [`Compose`] have no differences but argument order.
 ///
-/// For documentation see [`chain`]
+/// For documentation see [`chain`].
 ///
-/// [`Compose`]: crate::unstable::compose::compose
-/// [`chain`]: self::chain
+/// [`Compose`]: crate::unstable::Compose
 #[must_use = "function combinators are lazy and do nothing unless called"]
 #[derive(Debug, Clone, Copy)]
 pub struct Chain<F, G> {
@@ -45,6 +44,9 @@ pub struct Chain<F, G> {
 }
 
 impl<F, G> Chain<F, G> {
+    /// Creates chain of functions `f` and `g`.
+    ///
+    /// It's preferred to use [`chain`] instead.
     #[inline]
     pub fn new<A>(f: F, g: G) -> Self
     where
@@ -54,12 +56,14 @@ impl<F, G> Chain<F, G> {
         Chain { f, g }
     }
 
+    /// Returns inner functions.
     #[inline]
     pub fn into_inner(self) -> (F, G) {
         let Chain { f, g } = self;
         (f, g)
     }
 
+    /// Returns references to inner functions.
     #[inline]
     pub fn as_inner(&self) -> (&F, &G) {
         let Chain { f, g } = self;

@@ -65,8 +65,8 @@
 //!
 //! [`unstable`]: crate::unstable
 //!
-//! [`Chain::into_inner`]: crate::unstable::chain::Chain::into_inner
-//! [`.chain`]: crate::unstable::ext::FnExt::chain
+//! [`Chain::into_inner`]: crate::unstable::Chain::into_inner
+//! [`.chain`]: crate::unstable::FnExt::chain
 //!
 //! [`fn_traits`]: https://doc.rust-lang.org/unstable-book/library-features/fn-traits.html
 //! [`unboxed_closures`]: https://doc.rust-lang.org/unstable-book/language-features/unboxed-closures.html
@@ -80,6 +80,12 @@
 #![doc(html_logo_url = "https://raw.githubusercontent.com/WaffleLapkin/fntools/dev/logo.svg")]
 // I want explicit `Fn(Arg) -> ()`
 #![allow(clippy::unused_unit)]
+#![deny(
+    missing_debug_implementations,
+    missing_copy_implementations,
+    missing_docs,
+    broken_intra_doc_links
+)]
 
 #[macro_use]
 /// Helper macros these are used in this lib
@@ -149,6 +155,8 @@ pub mod unstable {
 pub mod tuple {
     /// Append element to tuple (`T + (A, B) => (T, A, B)`)
     pub mod append;
+    /// Tuple with at least 2 elements.
+    pub mod at_least_2;
     /// Concat tuples (`(A, B) + (C, D) => (A, B, C, D)`)
     ///
     /// **NOTE**: this module is under `#[cfg(feature = "concat")]`
@@ -162,6 +170,4 @@ pub mod tuple {
     pub mod push;
     /// Take element from tuple (`(T, A, B) => (T, (A, B))`)
     pub mod take;
-
-    pub mod at_least_2;
 }

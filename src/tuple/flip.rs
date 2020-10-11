@@ -23,6 +23,7 @@ pub trait FlipTuple: Sized + Sealed {
     /// Result of flipping the tuple
     type Res: FlipTuple<Res = Self>;
 
+    /// Flips elements of tuple.
     fn flip(self) -> Self::Res;
 }
 

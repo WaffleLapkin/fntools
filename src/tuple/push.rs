@@ -14,6 +14,7 @@ pub trait TuplePush<T>: Sized + Sealed {
     /// Result of pushing element `E` to tuple `Self`
     type Res: TuplePop<Rem = Self, Pop = T>;
 
+    /// Push element into tuple.
     fn push(self, element: T) -> Self::Res;
 }
 

@@ -31,7 +31,7 @@
 /// - [`unstable::compose`]
 /// - [`fntools::chain`]
 ///
-/// [`unstable::compose`]: crate::unstable::compose::compose
+/// [`unstable::compose`]: crate::unstable::compose
 /// [`fntools::chain`]: crate::chain
 #[inline]
 pub fn compose<A, B, C, F, G>(f: F, g: G) -> impl Fn(A) -> C

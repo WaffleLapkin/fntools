@@ -22,12 +22,12 @@ use crate::{
 /// - [`flip`]
 /// - [`curry`]
 ///
-/// [`chain`]: crate::unstable::chain::chain
-/// [`untuple`]: crate::unstable::untuple::untuple
-/// [`compose`]: crate::unstable::compose::compose
-/// [`supply`]: crate::unstable::supply::supply
-/// [`flip`]: crate::unstable::flip::flip
-/// [`curry`]: crate::unstable::curry::curry
+/// [`chain`]: crate::unstable::chain
+/// [`untuple`]: crate::unstable::untuple
+/// [`compose`]: crate::unstable::compose
+/// [`supply`]: crate::unstable::supply
+/// [`flip`]: crate::unstable::flip
+/// [`curry`]: crate::unstable::curry
 pub trait FnExt<Args>: Sized {
     /// Chain two functions (`g ∘ self`)
     ///
@@ -47,7 +47,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// For more info see [`chain`]
     ///
-    /// [`chain`]: crate::unstable::chain::chain
+    /// [`chain`]: crate::unstable::chain
     #[inline]
     fn chain<G>(self, g: G) -> Chain<Self, G>
     where
@@ -97,7 +97,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// For more info see [`compose`]
     ///
-    /// [`compose`]: crate::unstable::compose::compose
+    /// [`compose`]: crate::unstable::compose
     #[inline]
     fn compose<A, G>(self, g: G) -> Compose<Self, G>
     where
@@ -137,7 +137,7 @@ pub trait FnExt<Args>: Sized {
     ///
     /// For more info see [`compose`]
     ///
-    /// [`compose`]: crate::unstable::compose::compose
+    /// [`compose`]: crate::unstable::compose
     #[inline]
     fn compose_ut<A, G>(self, g: G) -> Compose<Untuple<Self>, G>
     where
@@ -168,9 +168,20 @@ pub trait FnExt<Args>: Sized {
         Self: FnOnce<Args>,
         Args: TupleTake,
     {
-        supply(argument, self)
+        supply(self, argument)
     }
 
+    /// Flips argument order of `self`.
+    ///
+    /// # Example
+    /// ```
+    /// use fntools::unstable::FnExt;
+    ///
+    /// let fun = |a: &str, b: i32, c: char| format!("{}{}{}", a, b, c);
+    /// let fun = fun.flip();
+    ///
+    /// assert_eq!(fun('c', 17, "hello, "), "hello, 17c")
+    /// ```
     #[inline]
     fn flip(self) -> Flip<Self>
     where
@@ -180,7 +191,7 @@ pub trait FnExt<Args>: Sized {
         flip(self)
     }
 
-    /// **Extremely bad** curring.
+    /// Curring.
     ///
     /// ## Examples
     /// ```

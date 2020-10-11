@@ -17,6 +17,7 @@ pub trait TupleAppend<E>: Sized + Sealed {
     /// Result of the appending element `E` to tuple `Self`
     type Res: TupleTake<Take = E, Rem = Self>;
 
+    /// Append element to tuple.
     fn append(self, element: E) -> Self::Res;
 }
 
