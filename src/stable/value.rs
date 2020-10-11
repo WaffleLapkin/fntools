@@ -86,6 +86,8 @@ pub trait Apply {
     /// assert_eq!(val, 4);
     /// ```
     #[inline]
+    // https://github.com/rust-lang/rust-clippy/issues/6159
+    #[allow(clippy::needless_lifetimes)]
     fn apply_deref<'a, F, R>(&'a self, f: F) -> R
     where
         Self: Deref,
@@ -109,6 +111,8 @@ pub trait Apply {
     /// assert_eq!(vec, [0, 0, 0, 0]);
     /// ```
     #[inline]
+    // https://github.com/rust-lang/rust-clippy/issues/6159
+    #[allow(clippy::needless_lifetimes)]
     fn apply_deref_mut<'a, F, R>(&'a mut self, f: F) -> R
     where
         Self: DerefMut,
