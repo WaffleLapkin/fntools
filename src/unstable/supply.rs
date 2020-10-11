@@ -5,14 +5,14 @@ use std::{
 
 use crate::tuple::{append::TupleAppend, take::TupleTake};
 
-/// Supply argument to function
+/// Supply `argument` to the function `f`.
 ///
 /// ## Examples
 /// ```
 /// use fntools::unstable::supply;
 ///
 /// let add = |a: i32, b: i32| a + b;
-/// let add_5 = supply(5, add);
+/// let add_5 = supply(add, 5);
 ///
 /// assert_eq!(add_5(5), 10);
 /// assert_eq!(add_5(661), 666);
@@ -21,37 +21,39 @@ use crate::tuple::{append::TupleAppend, take::TupleTake};
 /// use fntools::unstable::supply;
 ///
 /// let fun = |a: i32, b: usize, c: String| format!("a: {}, b: {}, c: {:?}", a, b, c);
-/// let fun = supply(8, fun);
-/// let fun = supply(16, fun);
-/// let fun = supply(String::from("AAA"), fun);
+/// let fun = supply(fun, 8);
+/// let fun = supply(fun, 16);
+/// let fun = supply(fun, String::from("AAA"));
 ///
-/// assert_eq!(fun(), "a: 8, b: 16, c: \"AAA\"")
+/// assert_eq!(fun(), "a: 8, b: 16, c: \"AAA\"");
 /// ```
 #[inline]
-pub fn supply<F, A>(argument: A::Take, f: F) -> Supply<A::Take, F, A>
+pub fn supply<F, A>(f: F, argument: A::Take) -> Supply<A::Take, F, A>
 where
     F: FnOnce<A>,
     A: TupleTake,
 {
-    Supply::new(argument, f)
+    Supply::new(f, argument)
 }
 
-/// Represent supplying param `T` to function `F`
+/// Represents function `F` with supplied argument `T`.
 ///
-/// See [supply](self::supply) for documentation
+/// See [`supply`] for documentation.
 #[must_use = "function combinators are lazy and do nothing unless called"]
 pub struct Supply<T, F, A> {
-    /// Supplied argument
     argument: T,
     f: F,
-    marker: PhantomData<dyn Fn(A)>,
+    marker: PhantomData<fn(A)>,
 }
 
-// TODO: for some reasons when param `A` moved to `new` (new<A>)
-//   type inference brakes
+// FIXME(waffle): for some reasons when param `A` moved to `new` (new<A>)
+//                type inference brakes
 impl<T, F, A> Supply<T, F, A> {
+    /// Creates version of the functions `f` with supplied `argument`.
+    ///
+    /// It's preferred to use [`supply`] instead.
     #[inline]
-    pub fn new(argument: T, f: F) -> Self
+    pub fn new(f: F, argument: T) -> Self
     where
         F: FnOnce<A>,
         A: TupleTake<Take = T>,
@@ -62,6 +64,28 @@ impl<T, F, A> Supply<T, F, A> {
             f,
             marker: PhantomData,
         }
+    }
+
+    /// Returns inner function and supplied argument.
+    #[inline]
+    pub fn into_inner(self) -> (F, T) {
+        let Supply {
+            f,
+            argument,
+            marker: _,
+        } = self;
+        (f, argument)
+    }
+
+    /// Returns references to function and supplied argument.
+    #[inline]
+    pub fn as_inner(&self) -> (&F, &T) {
+        let Supply {
+            f,
+            argument,
+            marker: _,
+        } = self;
+        (f, argument)
     }
 }
 

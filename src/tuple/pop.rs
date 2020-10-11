@@ -26,6 +26,7 @@ pub trait TuplePop: Sized + Sealed {
     /// Poped element
     type Pop;
 
+    /// Pop element from tuple.
     fn pop(self) -> (Self::Rem, Self::Pop);
 }
 

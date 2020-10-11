@@ -26,6 +26,7 @@ pub trait TupleTake: Sized + Sealed {
     /// Taken element
     type Take;
 
+    /// Take element from tuple.
     fn take(self) -> (Self::Take, Self::Rem);
 }
 

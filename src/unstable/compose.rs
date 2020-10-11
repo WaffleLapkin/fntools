@@ -21,7 +21,7 @@
 /// - extension on all functions: [`FnExt::compose`]
 ///
 ///
-/// [`FnExt::compose`]: crate::unstable::ext::FnExt::compose
+/// [`FnExt::compose`]: crate::unstable::FnExt::compose
 /// [`compose`]: super::compose::compose
 /// [`fntools::compose`]: crate::compose
 #[inline]
@@ -33,11 +33,13 @@ where
     Compose::new(f, g)
 }
 
-/// Represent composition of 2 functions `F ∘ G`
+/// Represents composition of 2 functions `F ∘ G`.
+///
+/// > Note: `Compose` and [`Chain`] have no differences but argument order.
 ///
 /// For documentation see [`compose`]
 ///
-/// [`compose`]: self::compose
+/// [`Chain`]: crate::unstable::Chain
 #[must_use = "function combinators are lazy and do nothing unless called"]
 #[derive(Debug, Clone, Copy)]
 pub struct Compose<F, G> {
@@ -46,6 +48,9 @@ pub struct Compose<F, G> {
 }
 
 impl<F, G> Compose<F, G> {
+    /// Creates composition of functions `f` and `g`.
+    ///
+    /// It's preferred to use [`compose`] instead.
     #[inline]
     pub fn new<A>(f: F, g: G) -> Self
     where
@@ -55,12 +60,14 @@ impl<F, G> Compose<F, G> {
         Compose { f, g }
     }
 
+    /// Returns inner functions.
     #[inline]
     pub fn into_inner(self) -> (F, G) {
         let Compose { f, g } = self;
         (f, g)
     }
 
+    /// Returns references to inner functions.
     #[inline]
     pub fn as_inner(&self) -> (&F, &G) {
         let Compose { f, g } = self;
